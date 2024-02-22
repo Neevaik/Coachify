@@ -10,7 +10,7 @@ import {
 
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Updateuser, updateUser } from '../reducers/user';
+import { updateUser } from '../reducers/user';
 
 
 
