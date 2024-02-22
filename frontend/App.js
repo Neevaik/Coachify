@@ -13,8 +13,10 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Profile" component={ExplorerScreen} />
-      </Stack.Navigator>
+        <Stack.Screen name="Explorer" component={ExplorerScreen} />
+        <Stack.Screen name="Planning" component={ExplorerScreen} />
+        <Stack.Screen name="Setting" component={ExplorerScreen} />
+        </Stack.Navigator>
     </NavigationContainer>
   );
 }
