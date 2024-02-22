@@ -9,11 +9,11 @@ const vertexAI = new VertexAI({ project: projectId, location: location });
 async function run() {
   const model = vertexAI.preview.getGenerativeModel({ model: "gemini-pro" });
   const request = {
-    contents: [{ role: "user", parts: [{ text: "Dis moi que je suis le plus beau des blancs" }] }],
+    contents: [{ role: "user", parts: [{ text: "réponds moi sous format JSON" }] }],
   };
   const result = await model.generateContent(request);
   const response = await result.response;
-
+  
   console.log(response.candidates[0].content.parts[0].text);
 }
 
