@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  email: null,
+  username: null,
   password: null,
 };
 
@@ -10,7 +10,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     updateUser: (state, action) => {
-      state.email = action.payload.email;
+      state.username = action.payload.username;
       state.password = action.payload.password;
     },
   },
