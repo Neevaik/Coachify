@@ -3,6 +3,8 @@ import { ImageBackground, Image, KeyboardAvoidingView, Platform, StyleSheet, Tex
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../reducers/user';
 
+import styles from '../styles/LoginScreenStyles';
+
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
   const [username, setUsername] = useState('');
@@ -29,7 +31,7 @@ export default function LoginScreen({ navigation }) {
         <KeyboardAvoidingView style={styles.formContainer} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
           <TextInput
             placeholder='Username'
-            onChangeText={text => setUsername(text)}
+            onChangeText={username => setUsername(username)}
             value={username}
             style={styles.input}
             autoCapitalize="none"
@@ -37,7 +39,7 @@ export default function LoginScreen({ navigation }) {
           />
           <TextInput
             placeholder='Password'
-            onChangeText={text => setPassword(text)}
+            onChangeText={password => setPassword(password)}
             value={password}
             style={styles.input}
             secureTextEntry
@@ -89,86 +91,4 @@ export default function LoginScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  BackgroundScreen: {
-    flex: 1,
-    width: '105%',
-    resizeMode: 'cover',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  Title: {
-    width: 150,
-    height: 150,
-    resizeMode: 'contain',
-    alignSelf: 'center',
-    marginBottom: 20,
-    backgroundColor: '#ffff'
-  },
-  formContainer: {
-    width: '100%',
-    alignItems: 'center',
-  },
-  input: {
-    width: '40%',
-    height: 40,
-    borderColor: '#ffffff',
-    borderWidth: 1,
-    marginBottom: 20,
-    paddingHorizontal: 10,
-    color: '#ffffff',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '40%',
-  },
-  button: {
-    backgroundColor: 'blue',
-    width: '45%',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 5,
-  },
-  textButton: {
-    color: 'white',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalTitle: {
-    fontSize: 20,
-    marginBottom: 20,
-  },
-  modalButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '40%',
-  },
-  modalButton: {
-    backgroundColor: 'blue',
-    width: '45%',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 5,
-    marginTop: 20,
-  },
-  cancelButton: {
-    backgroundColor: 'red',
-  },
-  inputModal: {
-    color: '#000000',
-  },
-  inputTextModal: {
-    color: '#000000',
-  },
-});
+

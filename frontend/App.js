@@ -1,5 +1,4 @@
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -26,11 +25,17 @@ const TabNavigator = () => {
     <Tab.Navigator screenOptions={({ route }) => ({
       tabBarIcon: ({ color, size }) => {
         let iconName = '';
-
-        if (route.name === 'Explorer' || 'Planning' || 'Setting') {
-          iconName = 'location-arrow';
+        
+        if (route.name === 'Home') {
+          iconName = 'home';
+        } else if (route.name === 'Explorer') {
+          iconName = 'search';
+        } else if (route.name === 'Planning') {
+          iconName = 'calendar';
+        } else if (route.name === 'Setting') {
+          iconName = 'cog';
         }
-
+        
         return <FontAwesome name={iconName} size={size} color={color} />;
       },
       tabBarActiveTintColor: '#ec6e5b',
