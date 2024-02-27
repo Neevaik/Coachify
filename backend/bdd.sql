@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Performs(
         date DATE NOT NULL,
         feeling INT NOT NULL,
         calories INT NOT NULL,
-        PRIMARY KEY(performance_id, user_id, session_id)
+        PRIMARY KEY(performance_id, user_id, session_id),
         FOREIGN KEY(user_id) REFERENCES COACHIFY.User(user_id) ON DELETE RESTRICT ON UPDATE CASCADE,
         FOREIGN KEY(session_id) REFERENCES COACHIFY.Workout_session(session_id) ON DELETE RESTRICT ON UPDATE CASCADE);
 
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Muscle(
 
 CREATE TABLE IF NOT EXISTS COACHIFY.Targets(
         exercise_id SERIAL NOT NULL,
-        muscle_name SERIAL NOT NULL,
+        muscle_name VARCHAR(40) NOT NULL,
         PRIMARY KEY(exercise_id, muscle_name),
         FOREIGN KEY(exercise_id) REFERENCES COACHIFY.Exercise(exercise_id) ON DELETE RESTRICT ON UPDATE CASCADE,
         FOREIGN KEY(muscle_name) REFERENCES COACHIFY.Muscle(muscle_name) ON DELETE RESTRICT ON UPDATE CASCADE);
@@ -111,12 +111,13 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Requires(
 CREATE TABLE IF NOT EXISTS COACHIFY.Conversation(
         conversation_id SERIAL NOT NULL,
         user_id SERIAL NOT NULL,
-        PRIMARY KEY(conversation_id, user_id)
+        PRIMARY KEY(conversation_id, user_id),
         FOREIGN KEY(user_id) REFERENCES COACHIFY.User(user_id) ON DELETE RESTRICT ON UPDATE CASCADE);
 
 CREATE TABLE IF NOT EXISTS COACHIFY.Message(
         message_id SERIAL NOT NULL,
         conversation_id SERIAL NOT NULL,
+        user_id SERIAL NOT NULL,
         content VARCHAR NOT NULL,
         author BOOLEAN NOT NULL, -- False pour modèle, True pour utilisateur
         timestamp TIMESTAMP NOT NULL,
@@ -124,4 +125,4 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Message(
         FOREIGN KEY(conversation_id, user_id) REFERENCES COACHIFY.Conversation(conversation_id, user_id) ON DELETE RESTRICT ON UPDATE CASCADE);
 
 
-INSERT INTO COACHIFY.User VALUES(DEFAULT, 'Paul', 'monicploc@gmail.com', 'password', 40, 180, 3)
+INSERT INTO COACHIFY.User VALUES(DEFAULT, 'Paul', 'monicploc@gmail.com', 'password', 40, 180, 3);
