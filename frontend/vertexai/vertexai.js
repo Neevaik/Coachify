@@ -48,7 +48,7 @@ async function generateExercises(user, workoutSession) {
 const user = {
   height: 180,
   weight: 80,
-  objective: "perte de poids",
+  objective: "perdre du poids",
   age: 25,
 };
 const workoutSession = {
@@ -56,7 +56,7 @@ const workoutSession = {
     intensity: 3,
     planning: 7,
     location: "maison",
-    equipment: "pas de matériel",
+    equipment: "sans matériel",
   };
 
 
