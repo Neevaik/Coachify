@@ -3,11 +3,14 @@ var router = express.Router();
 
 const pool = require('../connectionString')
 
-router.get('/', (req, res) => {
-    pool.query("SELECT * FROM COACHIFY.User;", (error, results) => {
-        if (error) throw error;
-        res.status(200).json(results.rows);
-    })
+router.get('/', async (req, res) => {
+    try {
+      const results = await pool.query('SELECT * FROM COACHIFY.User;');
+      res.status(200).json(results.rows);
+    } catch (error) {
+      console.error('Error fetching users', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
 
@@ -39,14 +42,14 @@ router.get('/signin', (req, res) => {
 
 
 router.post('/signup', (req, res) => {
-    const { name, email, password, age, height, activity } = req.body;
+    const { name, email, password, birthdate, height, activity } = req.body;
 
-    if (!name || !email || !password || !age || !height || !activity) {
+    if (!name || !email || !password || !birthdate || !height || !activity) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    pool.query('INSERT INTO COACHIFY.User (name, email, password, age, height, activity) VALUES ($1, $2, $3, $4, $5, $6) RETURNING user_id',
-        [name, email, password, age, height, activity],
+    pool.query('INSERT INTO COACHIFY.User (name, email, password, birthdate, height, activity) VALUES ($1, $2, $3, $4, $5, $6) RETURNING user_id',
+        [name, email, password, birthdate, height, activity],
         (error, results) => {
             if (error) {
                 console.error('Error executing query', error);
@@ -58,7 +61,27 @@ router.post('/signup', (req, res) => {
         });
 });
 
+router.delete('/deleteUser', (req, res) => {
+    const userId = parseInt(req.body.user_id);
 
+    if (!userId || isNaN(userId)) {
+        return res.status(400).json({ error: 'Invalid user ID' });
+    }
+
+    pool.query('CALL delete_user($1)', [userId], (error, results) => {
+        if (error) {
+            console.error('Error executing query', error);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+
+        // Vérifiez si des lignes ont été affectées par la suppression
+        if (results.rowCount === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.status(200).json({ message: 'User deleted successfully' });
+    });
+});
 
 
 
