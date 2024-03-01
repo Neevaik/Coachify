@@ -123,6 +123,3 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Message(
         timestamp TIMESTAMP NOT NULL,
         PRIMARY KEY (message_id, conversation_id, user_id),
         FOREIGN KEY(conversation_id, user_id) REFERENCES COACHIFY.Conversation(conversation_id, user_id) ON DELETE CASCADE ON UPDATE CASCADE);
-
-
-INSERT INTO COACHIFY.User VALUES(DEFAULT, 'Paul', 'monicploc@gmail.com', 'password', '2022-11-20', 180, 3);

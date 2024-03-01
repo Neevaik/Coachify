@@ -3,6 +3,8 @@ var router = express.Router();
 
 const pool = require('../connectionString')
 
+
+// GET
 router.get('/', async (req, res) => {
     try {
       const results = await pool.query('SELECT * FROM COACHIFY.User;');
@@ -14,7 +16,7 @@ router.get('/', async (req, res) => {
 });
 
 
-
+// POST
 router.post('/signin', (req, res) => {
 
     const { email, password } = req.body;
@@ -40,7 +42,6 @@ router.post('/signin', (req, res) => {
 });
 
 
-
 router.post('/signup', (req, res) => {
     const { name, email, password, birthdate, height, activity } = req.body;
 
@@ -61,20 +62,62 @@ router.post('/signup', (req, res) => {
         });
 });
 
-router.delete('/deleteUser', (req, res) => {
-    const userId = parseInt(req.body.user_id);
 
-    if (!userId || isNaN(userId)) {
+//PUT 
+router.put('/update', async (req, res) => {
+    try {
+      const user_id = req.body.user_id;
+  
+      if (!user_id || isNaN(user_id)) {
+        return res.status(400).json({ error: 'Invalid user ID' });
+      }
+
+      const { name, email, password, birthdate, height, activity } = req.body;
+  
+      const fieldsToUpdate = {};
+      if (name) fieldsToUpdate.name = name;
+      if (email) fieldsToUpdate.email = email;
+      if (password) fieldsToUpdate.password = password;
+      if (birthdate) fieldsToUpdate.birthdate = birthdate;
+      if (height) fieldsToUpdate.height = height;
+      if (activity) fieldsToUpdate.activity = activity;
+  
+      const updateFieldsString = Object.keys(fieldsToUpdate)
+        .map((field) => `${field} = $${Object.keys(fieldsToUpdate).indexOf(field) + 2}`)
+        .join(', ');
+  
+      const values = [user_id, ...Object.values(fieldsToUpdate)];
+  
+      const query = `UPDATE COACHIFY.User SET ${updateFieldsString} WHERE user_id = $1`;
+  
+      const updatedRows = await pool.query(query, values);
+  
+      if (updatedRows.rowCount === 0) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      res.status(200).json({ message: 'User updated successfully' });
+    } catch (error) {
+      console.error('Error updating user', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
+
+
+// DELETE
+router.delete('/delete', (req, res) => {
+    const user_id = req.body.user_id;
+
+    if (!user_id || isNaN(user_id)) {
         return res.status(400).json({ error: 'Invalid user ID' });
     }
 
-    pool.query('CALL delete_user($1)', [userId], (error, results) => {
+    pool.query('CALL delete_user($1)', [user_id], (error, results) => {
         if (error) {
             console.error('Error executing query', error);
             return res.status(500).json({ error: 'Internal server error' });
         }
-
-        // Vérifiez si des lignes ont été affectées par la suppression
         if (results.rowCount === 0) {
             return res.status(404).json({ error: 'User not found' });
         }
@@ -82,7 +125,6 @@ router.delete('/deleteUser', (req, res) => {
         res.status(200).json({ message: 'User deleted successfully' });
     });
 });
-
 
 
 module.exports = router;
