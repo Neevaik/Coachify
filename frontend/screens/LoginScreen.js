@@ -11,9 +11,27 @@ export default function LoginScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch(`http://192.168.1.23:3001/users/signin`, {
+        method : "POST",
+        headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password })});
+      console.log({ email, password });
+      const data = await response.json();
 
-
-  
+      if (response.ok) {
+        dispatch(updateUser({ user_id: data.user_id, email: email }));
+        navigation.navigate('TabNavigator');
+      } else {
+        console.error('Error:', data.error);
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+    }
+  };
 
   const handleCreateAccount = () => {
     setIsModalVisible(true);
