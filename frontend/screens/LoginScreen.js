@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ImageBackground, Image, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View, Modal } from 'react-native';
+import { ImageBackground, Image, KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, View, Modal } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../reducers/user';
 
@@ -7,13 +7,24 @@ import styles from '../styles/LoginScreenStyles';
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const handleSubmit = () => {
-    dispatch(updateUser({ username, password }));
-    navigation.navigate('TabNavigator');
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/users/signin?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
+      const data = await response.json();
+
+      if (response.ok) {
+        dispatch(updateUser({ user_id: data.user_id, email: email }));
+        navigation.navigate('TabNavigator');
+      } else {
+        console.error('Error:', data.error);
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+    }
   };
 
   const handleCreateAccount = () => {
@@ -30,9 +41,9 @@ export default function LoginScreen({ navigation }) {
         <Image style={styles.Title} source={require('../images/LogoCoachify.png')} />
         <KeyboardAvoidingView style={styles.formContainer} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
           <TextInput
-            placeholder='Username'
-            onChangeText={username => setUsername(username)}
-            value={username}
+            placeholder='Email'
+            onChangeText={email => setEmail(email)}
+            value={email}
             style={styles.input}
             autoCapitalize="none"
             placeholderTextColor="#ffffff"
@@ -60,9 +71,9 @@ export default function LoginScreen({ navigation }) {
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Créer un compte</Text>
           <TextInput
-            placeholder='Username'
-            onChangeText={text => setUsername(text)}
-            value={username}
+            placeholder='Email'
+            onChangeText={text => setEmail(text)}
+            value={email}
             style={[styles.input, styles.inputModal]}
             autoCapitalize="none"
             placeholderTextColor="#000000"
