@@ -3,7 +3,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-const PORT = 3001;
+// const PORT = 3001;
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -19,6 +19,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-app.listen(PORT, () => console.log(`App launch on port ${PORT}`))
+// app.listen(PORT, () => console.log(`App launch on port ${PORT}`))
 
 module.exports = app;
