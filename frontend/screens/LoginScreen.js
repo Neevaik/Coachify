@@ -11,21 +11,9 @@ export default function LoginScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const handleSubmit = async () => {
-    try {
-      const response = await fetch(`http://localhost:3000/users/signin?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
-      const data = await response.json();
 
-      if (response.ok) {
-        dispatch(updateUser({ user_id: data.user_id, email: email }));
-        navigation.navigate('TabNavigator');
-      } else {
-        console.error('Error:', data.error);
-      }
-    } catch (error) {
-      console.error('Network error:', error);
-    }
-  };
+
+  
 
   const handleCreateAccount = () => {
     setIsModalVisible(true);
