@@ -13,7 +13,13 @@ export default function LoginScreen({ navigation }) {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/users/signin?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
+      const response = await fetch(`http://192.168.1.23:3001/users/signin`, {
+        method : "POST",
+        headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password })});
+      console.log({ email, password });
       const data = await response.json();
 
       if (response.ok) {
