@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ImageBackground, Image, KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, View, Modal } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../reducers/user';
+import ipadress from '../ipadress';
 
 import styles from '../styles/LoginScreenStyles';
 
@@ -13,7 +14,7 @@ export default function LoginScreen({ navigation }) {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch(`http://192.168.1.23:3001/users/signin`, {
+      const response = await fetch(`http://${ipadress}:3001/users/signin`, {
         method : "POST",
         headers: {
         'Content-Type': 'application/json',
