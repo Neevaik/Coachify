@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Message(
         conversation_id SERIAL NOT NULL,
         user_id SERIAL NOT NULL,
         content VARCHAR NOT NULL,
-        author BOOLEAN NOT NULL, -- False pour modèle, True pour utilisateur
+        user_is_author BOOLEAN NOT NULL, -- False pour modèle, True pour utilisateur
         timestamp TIMESTAMP NOT NULL,
         PRIMARY KEY (message_id, conversation_id, user_id),
         FOREIGN KEY(conversation_id, user_id) REFERENCES COACHIFY.Conversation(conversation_id, user_id) ON DELETE CASCADE ON UPDATE CASCADE);
