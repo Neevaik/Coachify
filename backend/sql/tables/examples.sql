@@ -18,3 +18,37 @@ INSERT INTO COACHIFY.Weight (user_id, weight_value, date) VALUES
   (4, 69.5, '2023-12-01'),
   (5, 85.0, '2023-11-14'),
   (5, 84.5, '2023-12-01');
+
+-- Table Exercise
+INSERT INTO COACHIFY.Exercise (name, description, video_link, GIF_link, level) VALUES
+('Squat', 'Exercice de musculation pour les jambes et les fessiers', 'example', 'example', 2),
+('Pompe', 'Exercice de musculation pour le haut du corps', 'example', 'example', 1),
+('Fente avant', 'Exercice de musculation pour les jambes et les fessiers', 'example', 'example', 2),
+('Crunch', 'Exercice de musculation pour les abdominaux', 'example', 'example', 1),
+('Dips', 'Exercice de musculation pour les triceps', 'example', 'example', 2);
+
+-- Table Muscle
+INSERT INTO COACHIFY.Muscle (muscle_name, muscle_group, function) VALUES
+('Quadriceps', 'Jambes', 'Extension du genou'),
+('Ischio-jambiers', 'Jambes', 'Flexion du genou'),
+('Fessiers', 'Jambes', 'Extension, abduction, rotation externe de la hanche'),
+('Pectoraux', 'Dos', 'Adduction, flexion du bras'),
+('Dos', 'Dos', 'Extension, flexion latérale du tronc'),
+('Épaules', 'Épaules', 'Abduction, flexion, rotation externe du bras'),
+('Biceps', 'Bras', 'Flexion du coude'),
+('Triceps', 'Bras', 'Extension du coude'),
+('Abdominaux', 'Tronc', 'Flexion du tronc');
+
+-- Table Targets
+INSERT INTO COACHIFY.Targets (exercise_id, muscle_name) VALUES
+(1, 'Quadriceps'),
+(1, 'Ischio-jambiers'),
+(1, 'Fessiers'),
+(2, 'Pectoraux'),
+(2, 'Triceps'),
+(3, 'Fessiers'),
+(3, 'Quadriceps'),
+(4, 'Abdominaux'),
+(5, 'Triceps'),
+(5, 'Pectoraux');
+
