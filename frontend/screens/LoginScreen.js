@@ -2,28 +2,31 @@ import React, { useState } from 'react';
 import { ImageBackground, Image, KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, View, Modal } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../reducers/user';
-import { IPADDRESS, PORT} from '../ipaddress';
+import { IPADDRESS, PORT } from '../ipaddress';
 
 import styles from '../styles/LoginScreenStyles';
 
 export default function LoginScreen({ navigation }) {
-  const dispatch = useDispatch();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
+  const [email, setEmail] = useState('alice@example.com');
+  const [password, setPassword] = useState('password123');
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const dispatch = useDispatch();
 
   const handleSubmit = async () => {
     try {
       const response = await fetch(`http://${IPADDRESS}:${PORT}/users/signin`, {
-        method : "POST",
+        method: "POST",
         headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password })});
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password })
+      });
       const data = await response.json();
 
       if (response.ok) {
-        dispatch(updateUser({ user_id: data.user_id, email: email }));
+        dispatch(updateUser({ email, password, name: data.user.name }));
         navigation.navigate('TabNavigator');
       } else {
         console.error('Error:', data.error);
@@ -107,5 +110,3 @@ export default function LoginScreen({ navigation }) {
     </View>
   );
 }
-
-

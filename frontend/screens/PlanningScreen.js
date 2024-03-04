@@ -1,12 +1,9 @@
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { View } from 'react-native';
+import styles from '../styles/PlanningScreeStyles'
 
-export default function PlanningScreen({ navigation }) {
+export default function PlanningScreen() {
  return (
-   <View>
-     <Button
-       title="Go to Setting"
-       onPress={() => navigation.navigate('Setting')}
-     />
+   <View style={styles.container}>
    </View>
  );
 }

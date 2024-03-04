@@ -1,16 +1,9 @@
+import { View} from 'react-native';
+import styles from '../styles/ExplorerScreen'
 
-import { Button, StyleSheet, Text, View } from 'react-native';
-
-export default function ExplorerScreen({ navigation }) {
+export default function ExplorerScreen() {
  return (
-   <Text style={styles.title}>
-    HomePage
-   </Text>
+   <View style={styles.container}>
+   </View>
  );
 }
-
-const styles = StyleSheet.create({
-  title:{
-  alignSelf: 'center',
-  }
-})
