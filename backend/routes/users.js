@@ -40,7 +40,7 @@ router.post('/signin', (req, res) => {
     }
     
     const user = results.rows[0];
-    res.status(200).json({ user});
+    res.status(200).json({user});
   });
 });
 
@@ -52,17 +52,18 @@ router.post('/signup', (req, res) => {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  pool.query('INSERT INTO COACHIFY.User (name, email, password, birthdate, height, activity) VALUES ($1, $2, $3, $4, $5, $6) RETURNING user_id',
-    [name, email, password, birthdate, height, activity],
-    (error, results) => {
-      if (error) {
-        console.error('Error executing query', error);
-        return res.status(500).json({ error: 'Internal server error' });
-      }
+  const query = 'INSERT INTO COACHIFY.User (name, email, password, birthdate, height, activity) VALUES ($1, $2, $3, $4, $5, $6)';
+  const values = [name, email, password, birthdate, height, activity];
 
-      const userId = results.rows[0].user_id;
-      res.status(201).json({ user_id: userId });
-    });
+  pool.query(query, values, (error, results) => {
+    if (error) {
+      console.error('Error executing query', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    const user = results.rows[0];
+    res.status(201).json({ user });
+  });
 });
 
 
