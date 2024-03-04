@@ -9,7 +9,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var weightsRouter = require('./routes/weights');
 var exercisesRouter = require('./routes/exercises');
-
+var messagesRouter = require('./routes/messages');
+var settingsRouter = require('./routes/settings')
 
 var app = express();
 
@@ -23,6 +24,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/weights', weightsRouter);
 app.use('/exercises', exercisesRouter);
+app.use('/messages', messagesRouter);
+app.use('/settings', settingsRouter);
 
 app.listen(PORT, () => console.log(`App launch on port ${PORT}`))
 
