@@ -33,8 +33,8 @@ INSERT INTO COACHIFY.Muscle (muscle_name, muscle_group, function) VALUES
 ('Ischio-jambiers', 'Jambes', 'Flexion du genou'),
 ('Fessiers', 'Jambes', 'Extension, abduction, rotation externe de la hanche'),
 ('Pectoraux', 'Dos', 'Adduction, flexion du bras'),
-('Dos', 'Dos', 'Extension, flexion latérale du tronc'),
-('Épaules', 'Épaules', 'Abduction, flexion, rotation externe du bras'),
+('Dos', 'Dos', 'Extension, flexion laterale du tronc'),
+('epaules', 'epaules', 'Abduction, flexion, rotation externe du bras'),
 ('Biceps', 'Bras', 'Flexion du coude'),
 ('Triceps', 'Bras', 'Extension du coude'),
 ('Abdominaux', 'Tronc', 'Flexion du tronc');
@@ -54,17 +54,17 @@ INSERT INTO COACHIFY.Targets (exercise_id, muscle_name) VALUES
 
 -- Table Conversation
 INSERT INTO COACHIFY.Conversation (user_id, date_created, subject) VALUES
-(1, '2024-03-02 17:10:00', 'Question sur la fréquence des entraînements'),
+(1, '2024-03-02 17:10:00', 'Question sur la frequence des entraînements'),
 (2, '2024-03-02 17:20:00', 'Question sur les abdominaux'),
 (1, '2024-03-02 17:51:00', 'Question sur les performances');
 
 -- Table Message
 INSERT INTO COACHIFY.Message (conversation_id, user_id, content, user_is_author, timestamp) VALUES
-(1, 1, 'Salut TrainerBot ! J''ai une question concernant mon entraînement. A quelle fréquence dois-je les réaliser ?', True, '2024-03-02 17:10:00'),
-(1, 1, 'Comme précisé lors de la création de votre programme, la fréquence idéale pour vos entraînements est de 3 à 5 fois par semaine.', False, '2024-03-02 17:10:12'),
+(1, 1, 'Salut TrainerBot ! J''ai une question concernant mon entrainement. A quelle frequence dois-je les realiser ?', True, '2024-03-02 17:10:00'),
+(1, 1, 'Comme precise lors de la creation de votre programme, la frequence ideale pour vos entraînements est de 3 a 5 fois par semaine.', False, '2024-03-02 17:10:12'),
 (1, 1, 'Merci beaucoup !', True, '2024-03-02 17:10:41'),
 (2, 2, 'Comment faire des abdominaux ?', True, '2024-03-02 17:20:00'),
-(2, 2, 'Allongez vous sur le dos sur un tapis de yoga, pliez vos genoux écartés à largeur des épaules. Gardez votre dos plat sur le sol tout en contractant vos muscles abdominaux.', False, '2024-03-02 17:20:16'),
+(2, 2, 'Allongez vous sur le dos sur un tapis de yoga, pliez vos genoux ecartes a largeur des epaules. Gardez votre dos plat sur le sol tout en contractant vos muscles abdominaux.', False, '2024-03-02 17:20:16'),
 (2, 2, 'Super, merci !', True, '2024-03-02 17:20:53'),
 (3, 1, 'Que penses-tu de mes performances aujourd''hui ?', True, '2024-03-02 17:51:00');
 

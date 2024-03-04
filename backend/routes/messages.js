@@ -7,21 +7,23 @@ const pool = require('../connectionString');
 router.get('/getMessages', async (req, res) => {
     try {
         const { conversation_id, user_id } = req.body;
+        if (!conversation_id || isNaN(conversation_id) || !user_id || isNaN(user_id)) {
+            res.status(400).json('Invalid conversation ID or user ID')
+        }
         const query = `
-        SELECT message.message_id, message.conversation_id, message.user_id, message.content, message.user_is_author, message.timestamp
-        FROM COACHIFY.Message AS message
-        WHERE message.conversation_id = $1 AND message.user_id = $2
-      `;
+        SELECT message_id, conversation_id, user_id,content, user_is_author, timestamp
+        FROM COACHIFY.Message
+        WHERE conversation_id = $1 AND user_id = $2;`;
 
         const values = [conversation_id, user_id];
 
         const results = await pool.query(query, values);
 
         if (results.rowCount === 0) {
-            return []; 
+            return res.status(200).json({ messages: '[]' });
         }
 
-        return results.rows;
+        return res.status(200).json(results.rows);
     } catch (error) {
         console.error('Error getting conversation messages for user', error);
         throw error;

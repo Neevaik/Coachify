@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const tools = require('../tools')
 
 const pool = require('../connectionString');
 
@@ -53,7 +54,7 @@ router.post('/signup', (req, res) => {
   }
 
   pool.query('INSERT INTO COACHIFY.User (name, email, password, birthdate, height, activity) VALUES ($1, $2, $3, $4, $5, $6) RETURNING user_id',
-    [name, email, password, birthdate, height, activity],
+    [name, email, password, tools.convertDate(birthdate), height, activity],
     (error, results) => {
       if (error) {
         console.error('Error executing query', error);
@@ -81,7 +82,7 @@ router.put('/update', async (req, res) => {
     if (name) fieldsToUpdate.name = name;
     if (email) fieldsToUpdate.email = email;
     if (password) fieldsToUpdate.password = password;
-    if (birthdate) fieldsToUpdate.birthdate = birthdate;
+    if (birthdate) fieldsToUpdate.birthdate = tools.convertDate(birthdate);
     if (height) fieldsToUpdate.height = height;
     if (activity) fieldsToUpdate.activity = activity;
 
