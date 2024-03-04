@@ -28,7 +28,7 @@ router.post('/signin', (req, res) => {
     return res.status(400).json({ error: 'Missing username or password' });
   }
 
-  pool.query('SELECT user_id FROM COACHIFY.User WHERE email = $1 AND password = $2', [email, password], (error, results) => {
+  pool.query('SELECT * FROM COACHIFY.User WHERE email = $1 AND password = $2', [email, password], (error, results) => {
 
     if (error) {
       console.error('Error executing query', error);
@@ -38,9 +38,9 @@ router.post('/signin', (req, res) => {
     if (results.rows.length === 0) {
       return res.status(404).json({ error: 'User not found' });
     }
-
-    const userId = results.rows[0].user_id;
-    res.status(200).json({ user_id: userId });
+    
+    const user = results.rows[0];
+    res.status(200).json({ user});
   });
 });
 
