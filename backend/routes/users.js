@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const tools = require('../tools')
+const tools = require('../tools');
 
 const pool = require('../connectionString');
 
@@ -61,9 +61,9 @@ router.post('/signup', (req, res) => {
         return res.status(500).json({ error: 'Internal server error' });
       }
 
-    const user = results.rows[0];
-    res.status(201).json({ user });
-  });
+      const user = results.rows[0];
+      res.status(201).json({ user : user});
+    });
 });
 
 
