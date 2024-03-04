@@ -10,7 +10,7 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Welcome {user.name}</Text>
+      <Text style={styles.header}>Your programme is set for you {user.name} !</Text>
     </View>
   );
 }

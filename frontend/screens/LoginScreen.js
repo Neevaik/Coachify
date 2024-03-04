@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { ImageBackground, Image, KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, View, Modal } from 'react-native';
+
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../reducers/user';
+import SignUpModal from '../component/Signup';
+
 import { IPADDRESS, PORT } from '../ipaddress';
 
 import styles from '../styles/LoginScreenStyles';
@@ -40,10 +43,6 @@ export default function LoginScreen({ navigation }) {
     setIsModalVisible(true);
   };
 
-  const handleModalSubmit = () => {
-    setIsModalVisible(false);
-  };
-
   return (
     <View style={styles.container}>
       <ImageBackground style={styles.BackgroundScreen} source={require('../images/BackgroundScreen.jpg')} blurRadius={7}>
@@ -76,37 +75,7 @@ export default function LoginScreen({ navigation }) {
         </KeyboardAvoidingView>
       </ImageBackground>
 
-      <Modal visible={isModalVisible} animationType="slide">
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Créer un compte</Text>
-          <TextInput
-            placeholder='Email'
-            onChangeText={text => setEmail(text)}
-            value={email}
-            style={[styles.input, styles.inputModal]}
-            autoCapitalize="none"
-            placeholderTextColor="#000000"
-            color={styles.inputTextModal.color}
-          />
-          <TextInput
-            placeholder='Password'
-            onChangeText={text => setPassword(text)}
-            value={password}
-            style={[styles.input, styles.inputModal]}
-            secureTextEntry
-            placeholderTextColor="#000000"
-            color={styles.inputTextModal.color}
-          />
-          <View style={styles.modalButtonContainer}>
-            <TouchableOpacity style={styles.modalButton} onPress={handleModalSubmit}>
-              <Text style={styles.textButton}>Valider</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setIsModalVisible(false)}>
-              <Text style={styles.textButton}>Annuler</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+      <SignUpModal isVisible={isModalVisible} setIsVisible={setIsModalVisible} navigation={navigation} />
     </View>
   );
 }

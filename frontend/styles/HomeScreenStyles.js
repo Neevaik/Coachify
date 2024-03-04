@@ -8,6 +8,7 @@ export default StyleSheet.create({
     },
     header : {
         alignSelf: 'center',
+        color:'white',
     }
 
 })

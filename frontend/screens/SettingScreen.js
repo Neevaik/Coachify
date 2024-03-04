@@ -17,22 +17,22 @@ export default function SettingScreen({ navigation }) {
       </View>
 
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Profile')}>
-          <Text style={styles.buttonText}>Mon profil</Text>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>My profil</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Preferences')}>
-          <Text style={styles.buttonText}>Mes préférences</Text>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Preferences</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('History')}>
-          <Text style={styles.buttonText}>Mon historique</Text>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>My history</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Settings')}>
-          <Text style={styles.buttonText}>Paramètres</Text>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Settings</Text>
         </TouchableOpacity>
-        
+
       </View>
     </View>
   );
