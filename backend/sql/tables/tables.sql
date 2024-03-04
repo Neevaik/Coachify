@@ -127,3 +127,12 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Message(
         timestamp TIMESTAMP NOT NULL,
         PRIMARY KEY (message_id, conversation_id, user_id),
         FOREIGN KEY(conversation_id, user_id) REFERENCES COACHIFY.Conversation(conversation_id, user_id) ON DELETE CASCADE ON UPDATE CASCADE);
+
+CREATE TABLE IF NOT EXISTS COACHIFY.Settings(
+        settings_id SERIAL NOT NULL,
+        user_id SERIAL NOT NULL,
+        notification BOOLEAN NOT NULL,
+        theme BOOLEAN NOT NULL,
+        voice_coach BOOLEAN NOT NULL,
+        PRIMARY KEY (settings_id),
+        FOREIGN KEY (user_id) REFERENCES COACHIFY.User(user_id) ON DELETE CASCADE ON UPDATE CASCADE);
