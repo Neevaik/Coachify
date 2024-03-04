@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Exercise(
         description VARCHAR NOT NULL,
         video_link VARCHAR NOT NULL,
         GIF_link VARCHAR NOT NULL,
-        level INT NOT NULL,
+        level INT NOT NULL CHECK(level >= 1 AND level <=5), -- niveau de difficulté de l'exercice compris entre 1 et 5
         PRIMARY KEY(exercise_id));
 
 CREATE TABLE IF NOT EXISTS COACHIFY.Contains(
@@ -87,6 +87,8 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Contains(
 
 CREATE TABLE IF NOT EXISTS COACHIFY.Muscle(
         muscle_name VARCHAR(40) NOT NULL,
+        muscle_group VARCHAR(40) NOT NULL,
+        function VARCHAR NOT NULL,
         PRIMARY KEY(muscle_name));
 
 CREATE TABLE IF NOT EXISTS COACHIFY.Targets(
@@ -111,6 +113,8 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Requires(
 CREATE TABLE IF NOT EXISTS COACHIFY.Conversation(
         conversation_id SERIAL NOT NULL,
         user_id SERIAL NOT NULL,
+        date_created DATE NOT NULL,
+        subject VARCHAR(50),
         PRIMARY KEY(conversation_id, user_id),
         FOREIGN KEY(user_id) REFERENCES COACHIFY.User(user_id) ON DELETE CASCADE ON UPDATE CASCADE);
 
@@ -119,10 +123,7 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Message(
         conversation_id SERIAL NOT NULL,
         user_id SERIAL NOT NULL,
         content VARCHAR NOT NULL,
-        author BOOLEAN NOT NULL, -- False pour modèle, True pour utilisateur
+        user_is_author BOOLEAN NOT NULL, -- False pour modèle, True pour utilisateur
         timestamp TIMESTAMP NOT NULL,
         PRIMARY KEY (message_id, conversation_id, user_id),
         FOREIGN KEY(conversation_id, user_id) REFERENCES COACHIFY.Conversation(conversation_id, user_id) ON DELETE CASCADE ON UPDATE CASCADE);
-
-
-INSERT INTO COACHIFY.User VALUES(DEFAULT, 'Paul', 'monicploc@gmail.com', 'password', '2022-11-20', 180, 3);

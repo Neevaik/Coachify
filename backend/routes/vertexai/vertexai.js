@@ -12,7 +12,7 @@ async function generateExercises(user, workoutSession) {
         role: "user",
         parts: [
           {
-            text: `Créer un programme de musculation personnalisé pour un utilisateur de ${user.height} cm, ${user.weight} kg, ${user.age} ans, avec un objectif de ${user.objective}. Sessions de ${workoutSession.duration} minutes max, intensité ${workoutSession.intensity*100} %, pendant ${workoutSession.planning} jours à ${workoutSession.location} et avec ${workoutSession.equipment}.
+            text: `Créer un programme de musculation personnalisé pour un utilisateur de ${user.height} cm, ${user.weight} kg, ${user.age} ans, avec les objectifs ${user.objective}. Sessions de ${workoutSession.duration} minutes max, intensité ${workoutSession.intensity} , pendant ${workoutSession.planning} jours à ${workoutSession.location} et ${workoutSession.equipment}.
             Le nombre d'exercices doit être variable entre 8 et 16.
             La réponse doit être exportable au format JSON : 
                 {"programme" : 
