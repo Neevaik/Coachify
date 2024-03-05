@@ -19,4 +19,3 @@ function convertDate(dateStr) {
 module.exports = {
     convertDate,
 }
-console.log(convertDate('2022-12-12'))

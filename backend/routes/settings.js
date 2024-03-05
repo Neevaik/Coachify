@@ -23,14 +23,14 @@ router.get('/getByUserId', async (req, res) => {
     }
 })
 
-//POST 
+// PUT
 
-router.put('/update', async (req, res) => {
+router.put('/updateByUserId', async (req, res) => {
     try {
-        const user_id = req.body.user_id;
+        const {user_id, settings_id} = req.body;
 
-        if (!user_id || isNaN(user_id)) {
-            return res.status(400).json({ error: 'Invalid user ID' });
+        if (!user_id || isNaN(user_id) || !settings_id || isNaN(settings_id)) {
+            return res.status(400).json({ error: 'Invalid user ID or settings ID' });
         }
 
         const {notification, theme, voice_coach } = req.body;
@@ -41,17 +41,16 @@ router.put('/update', async (req, res) => {
         if (voice_coach) fieldsToUpdate.voice_coach = voice_coach;
 
         const updateFieldsString = Object.keys(fieldsToUpdate)
-            .map((field) => `${field} = $${Object.keys(fieldsToUpdate).indexOf(field) + 2}`)
+            .map((field) => `${field} = $${Object.keys(fieldsToUpdate).indexOf(field) + 3}`)
             .join(', ');
 
-
-        const values = [user_id, ...Object.values(fieldsToUpdate)];
+        
+        const values = [ user_id, settings_id, ...Object.values(fieldsToUpdate) ];
         const query = `
             UPDATE COACHIFY.Settings
             SET ${updateFieldsString}
-            WHERE user_id = $1
+            WHERE user_id = $1 AND settings_id = $2
           `;
-
         const updatedRows = await pool.query(query, values);
 
         if (updatedRows.rowCount === 0) {

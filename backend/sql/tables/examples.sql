@@ -69,10 +69,10 @@ INSERT INTO COACHIFY.Message (conversation_id, user_id, content, user_is_author,
 (3, 1, 'Que penses-tu de mes performances aujourd''hui ?', True, '2024-03-02 17:51:00');
 
 
---Table Settings
-INSERT INTO COACHIFY.settings (user_id, notification, theme, voice_coach) VALUES
-(1,True, True, True),
-(2, False, False, False),
-(3, True, False, False),
-(4, False, False, True),
-(5, False, True, False)
+-- --Table Settings
+-- INSERT INTO COACHIFY.settings (user_id, notification, theme, voice_coach) VALUES
+-- (1,True, True, True),
+-- (2, False, False, False),
+-- (3, True, False, False),
+-- (4, False, False, True),
+-- (5, False, True, False)
