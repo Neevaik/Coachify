@@ -39,7 +39,7 @@ router.post('/add', async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const query = `INSERT INTO COACHIFY.Weight (user_id, weight_value, date) VALUES ($1, $2, $3)`;
+    const query = `CALL insert_weight($1, $2, $3)`;
     const values = [user_id, weight_value, date];
 
     await pool.query(query, values);
@@ -94,7 +94,8 @@ router.delete('/delete', async (req, res) => {
       return res.status(400).json({ error: 'Invalid weight ID or user ID' });
     }
 
-    const query = `CALL delete_weight($1, $2)`;
+    const query = `DELETE FROM COACHIFY.Weight
+    WHERE weight_id = $1 AND user_id = $2;`;
     const values = [weight_id, user_id];
 
     const deletedRows = await pool.query(query, values);
