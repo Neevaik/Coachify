@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
-import { ImageBackground, Image, KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, View, Modal } from 'react-native';
+//#region imports
 
+import React from "react";
+import { ImageBackground, Image, Text, View } from 'react-native';
+import styles from '../styles/LoginScreenStyles';
+import { NativeBaseProvider, Box, FormControl, Input,Center,Heading,Link,HStack,VStack,Button } from "native-base";
+
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../reducers/user';
+
 import SignUpModal from '../component/Signup';
 
 import { IPADDRESS, PORT } from '../ipaddress';
 
-import styles from '../styles/LoginScreenStyles';
+//#endregion
 
 export default function LoginScreen({ navigation }) {
 
@@ -43,39 +49,67 @@ export default function LoginScreen({ navigation }) {
     setIsModalVisible(true);
   };
 
-  return (
-    <View style={styles.container}>
-      <ImageBackground style={styles.BackgroundScreen} source={require('../images/BackgroundScreen.jpg')} blurRadius={7}>
-        <Image style={styles.Title} source={require('../images/LogoCoachify.png')} />
-        <KeyboardAvoidingView style={styles.formContainer} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <TextInput
-            placeholder='Email'
-            onChangeText={email => setEmail(email)}
-            value={email}
-            style={styles.input}
-            autoCapitalize="none"
-            placeholderTextColor="#ffffff"
-          />
-          <TextInput
-            placeholder='Password'
-            onChangeText={password => setPassword(password)}
-            value={password}
-            style={styles.input}
-            secureTextEntry
-            placeholderTextColor="#ffffff"
-          />
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={handleSubmit}>
-              <Text style={styles.textButton}>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={handleCreateAccount}>
-              <Text style={styles.textButton}>Créer un compte</Text>
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
-      </ImageBackground>
+  const LoginForm = () => {
+    return <Center w="100%">
+        <Box safeArea p="2" py="8" w="90%" maxW="290">
+          <Heading size="lg" fontWeight="600" color="coolGray.800" _dark={{
+          color: "warmGray.50"
+        }}>
+            Welcome
+          </Heading>
+          <Heading mt="1" _dark={{
+          color: "warmGray.200"
+        }} color="coolGray.600" fontWeight="medium" size="xs">
+            Sign in to continue!
+          </Heading>
+  
+          <VStack space={3} mt="5">
+            <FormControl>
+              <FormControl.Label>Email ID</FormControl.Label>
+              <Input />
+            </FormControl>
+            <FormControl>
+              <FormControl.Label>Password</FormControl.Label>
+              <Input type="password" />
+              <Link _text={{
+              fontSize: "xs",
+              fontWeight: "500",
+              color: "indigo.500"
+            }} alignSelf="flex-end" mt="1">
+                Forget Password?
+              </Link>
+            </FormControl>
+            <Button mt="2" colorScheme="indigo">
+              Sign in
+            </Button>
+            <HStack mt="6" justifyContent="center">
+              <Text fontSize="sm" color="coolGray.600" _dark={{
+              color: "warmGray.200"
+            }}>
+                I'm a new user.{" "}
+              </Text>
+              <Link _text={{
+              color: "indigo.500",
+              fontWeight: "medium",
+              fontSize: "sm"
+            }} href="#">
+                Sign Up
+              </Link>
+            </HStack>
+          </VStack>
+        </Box>
+      </Center>;
+  };
 
-      <SignUpModal isVisible={isModalVisible} setIsVisible={setIsModalVisible} navigation={navigation} />
-    </View>
+  return (
+    <NativeBaseProvider>
+      <View style={styles.container}>
+        <ImageBackground style={styles.BackgroundScreen} source={require('../images/BackgroundScreen.jpg')} blurRadius={7} />
+        <Image style={styles.Logo} source={require('../images/LogoCoachify.png')} />
+    <LoginForm/>
+
+        <SignUpModal isVisible={isModalVisible} setIsVisible={setIsModalVisible} navigation={navigation} />
+      </View>
+    </NativeBaseProvider>
   );
 }

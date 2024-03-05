@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Modal } from 'react-native';
-import styles from '../styles/LoginScreenStyles';
+import { View, Text, TextInput, TouchableOpacity, Modal,Picker  } from 'react-native';
+import styles from '../styles/SignUpScreenStyles';
 
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../reducers/user';
