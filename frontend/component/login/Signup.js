@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal,Picker  } from 'react-native';
-import styles from '../styles/SignUpScreenStyles';
+import styles from '../../styles/SignUpScreenStyles';
 
 import { useDispatch } from 'react-redux';
-import { updateUser } from '../reducers/user';
+import { updateUser } from '../../reducers/user';
 
-import { IPADDRESS, PORT } from '../ipaddress';
+import { IPADDRESS, PORT } from '../../ipaddress';
 
 export default function RegistrationModal({ isVisible, setIsVisible, navigation }) {
     const [name, setName] = useState('');

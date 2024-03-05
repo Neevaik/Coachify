@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { ImageBackground, Image, Text, View } from 'react-native';
-import { NativeBaseProvider, Box, FormControl, Input, Center, Heading, Link, HStack, VStack, Button } from "native-base";
+import { NativeBaseProvider, FormControl, Input, Heading, Link, HStack, VStack, Button } from "native-base";
+import styles from '../styles/LoginScreenStyles'
+
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../reducers/user';
-import SignUpModal from '../component/Signup';
+
+import SignUpModal from '../component/login/Signup';
+
 import { IPADDRESS, PORT } from '../ipaddress';
-import styles from '../styles/LoginScreenStyles';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('alice@example.com');
@@ -41,15 +44,18 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <NativeBaseProvider>
-      <View style={styles.container}>
-        <ImageBackground style={styles.BackgroundScreen} source={require('../images/BackgroundScreen.jpg')} blurRadius={7} />
-        <Image style={styles.Logo} source={require('../images/LogoCoachify.png')} />
+      <ImageBackground style={styles.background} source={require('../images/BackgroundScreen.jpg')} blurRadius={7}>
+        <View style={styles.container}>
+          <View style={styles.logoContainer}>
+            <Image style={styles.logo} source={require('../images/LogoCoachify.png')} />
+          </View>
 
-        <Center w="100%">
-          <Box safeArea p="2" py="8" w="90%" maxW="290">
-            <Heading size="lg" fontWeight="600" color="coolGray.800" _dark={{ color: "warmGray.50" }}>
+          <View style={styles.form}>
+            
+            <Heading style={styles.titleForm}>
               Welcome
             </Heading>
+
             <Heading mt="1" _dark={{ color: "warmGray.200" }} color="coolGray.600" fontWeight="medium" size="xs">
               Sign in to continue!
             </Heading>
@@ -78,11 +84,10 @@ export default function LoginScreen({ navigation }) {
                 </Link>
               </HStack>
             </VStack>
-          </Box>
-        </Center>
-
-        <SignUpModal isVisible={isModalVisible} setIsVisible={setIsModalVisible} navigation={navigation} />
-      </View>
+          </View>
+        </View>
+      </ImageBackground>
+      <SignUpModal isVisible={isModalVisible} setIsVisible={setIsModalVisible} navigation={navigation} />
     </NativeBaseProvider>
   );
 }
