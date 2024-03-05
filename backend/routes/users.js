@@ -21,50 +21,49 @@ router.get('/getAll', async (req, res) => {
 
 
 // POST
-router.post('/signin', (req, res) => {
+router.post('/signin', async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Missing username or password' });
-  }
-
-  pool.query('SELECT * FROM COACHIFY.User WHERE email = $1 AND password = $2', [email, password], (error, results) => {
-
-    if (error) {
-      console.error('Error executing query', error);
-      return res.status(500).json({ error: 'Internal server error' });
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Missing username or password' });
     }
+
+    const results = await pool.query('SELECT * FROM COACHIFY.User WHERE email = $1 AND password = $2', [email, password]);
 
     if (results.rows.length === 0) {
       return res.status(404).json({ error: 'User not found' });
     }
-    
+
     const user = results.rows[0];
-    res.status(200).json({user});
-  });
-});
-
-
-router.post('/signup', (req, res) => {
-  const { name, email, password, birthdate, height, activity } = req.body;
-
-  if (!name || !email || !password || !birthdate || !height || !activity) {
-    return res.status(400).json({ error: 'Missing required fields' });
+    res.status(200).json({ user });
+  } catch (error) {
+    console.error('Error executing query', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-
-  pool.query('INSERT INTO COACHIFY.User (name, email, password, birthdate, height, activity) VALUES ($1, $2, $3, $4, $5, $6) RETURNING user_id',
-    [name, email, password, tools.convertDate(birthdate), height, activity],
-    (error, results) => {
-      if (error) {
-        console.error('Error executing query', error);
-        return res.status(500).json({ error: 'Internal server error' });
-      }
-
-      const user = results.rows[0];
-      res.status(201).json({ user : user});
-    });
 });
+
+
+
+router.post('/signup', async (req, res) => {
+  try {
+    const { name, email, password, birthdate, height, activity } = req.body;
+
+    if (!name || !email || !password || !birthdate || !height || !activity) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const results = await pool.query('INSERT INTO COACHIFY.User (name, email, password, birthdate, height, activity) VALUES ($1, $2, $3, $4, $5, $6) RETURNING user_id',
+      [name, email, password, tools.convertDate(birthdate), height, activity]);
+
+    const user = results.rows[0];
+    res.status(201).json({ user });
+  } catch (error) {
+    console.error('Error executing query', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 
 //PUT 

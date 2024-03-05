@@ -25,7 +25,7 @@ export default function LoginScreen({ navigation }) {
       const data = await response.json();
 
       if (response.ok) {
-        dispatch(updateUser({ email, password, name: data.user.name }));
+        dispatch(updateUser({user_id : data.user.user_id, email, password, name: data.user.name, birthdate : data.user.birthdate, height : data.user.height, activity : data.user.activity }));
         navigation.navigate('TabNavigator');
       } else {
         console.error('Error:', data.error);
