@@ -32,7 +32,7 @@ const TabNavigator = () => {
           iconName = 'search';
         } else if (route.name === 'Planning') {
           iconName = 'calendar';
-        } else if (route.name === 'Setting') {
+        } else if (route.name === 'Settings') {
           iconName = 'cog';
         }
         
@@ -45,7 +45,7 @@ const TabNavigator = () => {
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Explorer" component={ExplorerScreen} />
       <Tab.Screen name="Planning" component={PlanningScreen} />
-      <Tab.Screen name="Setting" component={SettingScreen} />
+      <Tab.Screen name="Settings" component={SettingScreen} />
     </Tab.Navigator>
   );
 };

@@ -1,33 +1,50 @@
 import { useSelector } from 'react-redux';
-import { useState, useRef } from "react";
-import { Modal, Input, FormControl, Button, VStack,Center, NativeBaseProvider, Text } from "native-base";
-import {IPADDRESS, PORT} from '../ipaddress';
+import { useState } from "react";
+import { Modal, Input, FormControl, Button,  Center, NativeBaseProvider, Text, FlatList, Box , Icon, ChevronRightIcon, Divider, extendTheme} from "native-base";
+import { IPADDRESS, PORT } from '../ipaddress';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../reducers/user';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { convertToDateFormat } from '../tools';
 
 export default function SettingScreen({ navigation }) {
+  //#region Native provider params
+  const ICONSIZE = 7;
+  //#endregion
+
   const user = useSelector(state => state.user);
   const [modalVisible, setModalVisible] = useState(false);
-  const [email, setEmail] = useState(user.email); // Créer une référence pour le composant Input
-  const [birthdate, setBirthdate] = useState(user.birthdate);
   const [name, setName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
+  const [password, setPassword] = useState(user.password);
+  const [birthdate, setBirthdate] = useState(convertToDateFormat(user.birthdate));
+  const [activity, setActivity] = useState(user.activity.toString());
+  const [height, setHeight] = useState(user.height.toString());
   
+
   const dispatch = useDispatch()
 
-
-  const handleModalCancel = () =>{
-    setBirthdate(user.birthdate);
+  
+  const handleModalCancel = () => {
+    setBirthdate(convertToDateFormat(user.birthdate));
     setEmail(user.email);
     setName(user.name);
+    setActivity(user.activity.toString());
+    setHeight(user.height.toString());
+    setPassword(user.password);
     setModalVisible(false);
   }
 
   const handleModalSubmit = async () => {
     try {
       const requestBody = {
-        user_id : user.user_id,
+        user_id: user.user_id,
         name,
-        birthdate
+        birthdate,
+        email,
+        password,
+        activity : parseInt(activity),
+        height :parseInt(height)
       };
       const response = await fetch(`http://${IPADDRESS}:${PORT}/users/update`, {
         method: "PUT",
@@ -39,7 +56,7 @@ export default function SettingScreen({ navigation }) {
       const data = await response.json();
 
       if (response.ok) {
-        dispatch(updateUser({ birthdate }));
+        dispatch(updateUser({ name, birthdate, email, password, activity, height }));
         navigation.navigate('TabNavigator');
         setModalVisible(false);
       } else {
@@ -48,39 +65,52 @@ export default function SettingScreen({ navigation }) {
     } catch (error) {
       console.error('Network error:', error);
     }
-    
+
   };
 
   return (
     <NativeBaseProvider>
-      <Center flex={1} px="3">
       <Modal isOpen={modalVisible} onClose={() => { setModalVisible(false); }} avoidKeyboard justifyContent="flex-end" bottom="4" size="lg">
         <Modal.Content>
           <Modal.CloseButton />
           <Modal.Header>Updating user information</Modal.Header>
           <Modal.Body>
-            <FormControl mt="3">
-              <FormControl.Label>Birthdate</FormControl.Label>
-              <Input value={birthdate} onChangeText={(text) => setBirthdate(text)}/>
+            <FormControl>
               <FormControl.Label>Name</FormControl.Label>
-              <Input value={name} onChangeText={(text) => setName(text)}/>
+              <Input value={name} onChangeText={(text) => setName(text)} />
+              <FormControl.Label>Email</FormControl.Label>
+              <Input value={email} onChangeText={(text) => setEmail(text)} />
+              <FormControl.Label>Password</FormControl.Label>
+              <Input value={password} onChangeText={(text) => setPassword(text)} />
+              <FormControl.Label>Birthdate</FormControl.Label>
+              <Input value={birthdate} onChangeText={(text) => setBirthdate(text)} />
+              <FormControl.Label>Height</FormControl.Label>
+              <Input value={height} onChangeText={(text) => setHeight(text)} />
+              <FormControl.Label>Activity</FormControl.Label>
+              <Input value={activity} onChangeText={(text) => setActivity(text)}/>
             </FormControl>
           </Modal.Body>
           <Modal.Footer>
-            <Button flex="1" onPress={() => handleModalSubmit()}>
-              Update
-            </Button>
-            <Button flex="1" onPress={() => handleModalCancel()}>
-              Cancel
-            </Button>
+            <Button.Group alignItems="center" direction='row' space={4} w={280}>
+              <Button onPress={() => handleModalSubmit()}>
+                Update
+              </Button>
+              <Button onPress={() => handleModalCancel()}>
+                Cancel
+              </Button>
+            </Button.Group>
           </Modal.Footer>
         </Modal.Content>
       </Modal>
-      <VStack space={8} alignItems="center">
-        <Button w="104" onPress={() => {setModalVisible(!modalVisible)}}>
-          My profile
-        </Button>
-      </VStack>
+      <Center flex={1}>
+        <Button.Group direction='column' colorScheme='blueGray' space={2} w={560} isAttached>
+          <Button  onPress={() => { setModalVisible(!modalVisible) }} leftIcon = {<Icon as={AntDesign} name='profile' size={ICONSIZE} color="white" />} rightIcon={<ChevronRightIcon />}>
+             My profile
+          </Button>
+          <Button variant="outline"  leftIcon = {<Icon as={Ionicons} name='settings-sharp' size={ICONSIZE}/>} rightIcon={<ChevronRightIcon />}>
+            General settings
+          </Button>
+        </Button.Group>
       </Center>
     </NativeBaseProvider>
   );
