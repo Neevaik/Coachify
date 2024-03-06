@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Modal,Picker  } from 'react-native';
-import styles from '../../styles/SignUpScreenStyles';
+import { FormControl, Input, Button, Modal, Box, Stack, Text, Slider } from "native-base";
 
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../../reducers/user';
 
 import { IPADDRESS, PORT } from '../../ipaddress';
 
-export default function RegistrationModal({ isVisible, setIsVisible, navigation }) {
+export default function RegistrationModal({ isOpen, onClose, navigation }) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [birthdate, setBirthdate] = useState('');
     const [height, setHeight] = useState('');
     const [activity, setActivity] = useState('');
+    const [onChangeValue, setOnChangeValue] = useState(1);
 
     const dispatch = useDispatch();
 
@@ -35,7 +35,7 @@ export default function RegistrationModal({ isVisible, setIsVisible, navigation 
                 body: JSON.stringify(requestBody)
             });
             const data = await response.json();
-    
+
             if (response.ok) {
                 dispatch(updateUser({ email, password, name }));
                 navigation.navigate('TabNavigator');
@@ -45,75 +45,70 @@ export default function RegistrationModal({ isVisible, setIsVisible, navigation 
         } catch (error) {
             console.error('Network error:', error);
         }
-        setIsVisible(false)
+        onClose();
     };
 
     return (
-        <Modal visible={isVisible} animationType="slide">
-            <View style={styles.modalContainer}>
-                <Text style={styles.modalTitle}>Créer un compte</Text>
-                <TextInput
-                    placeholder='Name'
-                    onChangeText={text => setName(text)}
-                    value={name}
-                    style={[styles.input, styles.inputModal]}
-                    autoCapitalize="none"
-                    placeholderTextColor="#000000"
-                    color={styles.inputTextModal.color}
-                />
-                <TextInput
-                    placeholder='Email'
-                    onChangeText={text => setEmail(text)}
-                    value={email}
-                    style={[styles.input, styles.inputModal]}
-                    autoCapitalize="none"
-                    placeholderTextColor="#000000"
-                    color={styles.inputTextModal.color}
-                />
-                <TextInput
-                    placeholder='Password'
-                    onChangeText={text => setPassword(text)}
-                    value={password}
-                    style={[styles.input, styles.inputModal]}
-                    secureTextEntry
-                    placeholderTextColor="#000000"
-                    color={styles.inputTextModal.color}
-                />
-                <TextInput
-                    placeholder='Birthdate'
-                    onChangeText={text => setBirthdate(text)}
-                    value={birthdate}
-                    style={[styles.input, styles.inputModal]}
-                    placeholderTextColor="#000000"
-                    color={styles.inputTextModal.color}
-                />
-                <TextInput
-                    placeholder='Height'
-                    onChangeText={text => setHeight(text)}
-                    value={height}
-                    style={[styles.input, styles.inputModal]}
-                    placeholderTextColor="#000000"
-                    color={styles.inputTextModal.color}
-                    keyboardType='numeric'
-                />
-                <TextInput
-                    placeholder='Activity'
-                    onChangeText={text => setActivity(text)}
-                    value={activity}
-                    style={[styles.input, styles.inputModal]}
-                    placeholderTextColor="#000000"
-                    color={styles.inputTextModal.color}
-                    keyboardType='numeric'
-                />
-                <View style={styles.modalButtonContainer}>
-                    <TouchableOpacity style={styles.modalButton} onPress={handleModalSubmit}>
-                        <Text style={styles.textButton}>Valider</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setIsVisible(false)}>
-                        <Text style={styles.textButton}>Annuler</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
+        <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal.Content maxWidth="400px">
+                <Modal.CloseButton />
+                <Modal.Header>New account</Modal.Header>
+                <Modal.Body>
+                    <FormControl>
+                        <FormControl.Label>Name</FormControl.Label>
+                        <Input value={name} onChangeText={(text) => setName(text)} />
+                    </FormControl>
+                    <FormControl mt="3">
+                        <FormControl.Label>Email</FormControl.Label>
+                        <Input value={email} onChangeText={(text) => setEmail(text)} />
+                    </FormControl>
+                    <FormControl mt="3">
+                        <FormControl.Label>Password</FormControl.Label>
+                        <Input value={password} onChangeText={(text) => setPassword(text)} />
+                    </FormControl>
+                    <FormControl mt="3">
+                        <FormControl.Label>Birthdate</FormControl.Label>
+                        <Input value={birthdate} onChangeText={(text) => setBirthdate(text)} />
+                    </FormControl>
+                    <FormControl mt="3">
+                        <FormControl.Label>Height</FormControl.Label>
+                        <Input value={height} onChangeText={(text) => setHeight(text)} />
+                    </FormControl>
+                    <FormControl mt="3">
+                        <FormControl.Label>Activity</FormControl.Label>
+                        <Input value={activity} onChangeText={(text) => setActivity(text)} />
+                    </FormControl>
+                    <Box alignItems="center" w="100%">
+                    <Stack space={4} alignItems="center" w="75%" maxW="300">
+                        <Text textAlign="center">Activity : {onChangeValue}</Text>
+                        <Slider
+                            defaultValue={1}
+                            minValue={1}
+                            maxValue={5}
+                            colorScheme="cyan"
+                            onChange={(v) => setOnChangeValue(Math.floor(v))}
+                            value={onChangeValue}
+                        >
+                            <Slider.Track>
+                                <Slider.FilledTrack />
+                            </Slider.Track>
+                            <Slider.Thumb />
+                        </Slider>
+                    </Stack>
+                </Box>
+                </Modal.Body>
+                
+                <Modal.Footer>
+                    <Button.Group space={2}>
+                        <Button variant="ghost" colorScheme="blueGray" onPress={onClose}>
+                            Cancel
+                        </Button>
+                        <Button onPress={handleModalSubmit}>
+                            Create
+                        </Button>
+                    </Button.Group>
+                </Modal.Footer>
+            </Modal.Content>
         </Modal>
     );
 }

@@ -1,6 +1,7 @@
+//#region imports
 import React, { useState } from "react";
 import { ImageBackground, Image, Text, View } from 'react-native';
-import { NativeBaseProvider, FormControl, Input, Heading, Link, HStack, VStack, Button } from "native-base";
+import { NativeBaseProvider, FormControl, Input, Heading, Link, HStack, VStack, Button,Center,Modal } from "native-base";
 import styles from '../styles/LoginScreenStyles'
 
 import { useDispatch } from 'react-redux';
@@ -9,11 +10,12 @@ import { updateUser } from '../reducers/user';
 import SignUpModal from '../component/login/Signup';
 
 import { IPADDRESS, PORT } from '../ipaddress';
+//#endregion
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('alice@example.com');
   const [password, setPassword] = useState('password123');
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
 
   const handleSubmit = async () => {
@@ -39,7 +41,7 @@ export default function LoginScreen({ navigation }) {
   };
 
   const handleCreateAccount = () => {
-    setIsModalVisible(true);
+    setShowModal(true);
   };
 
   return (
@@ -51,15 +53,12 @@ export default function LoginScreen({ navigation }) {
           </View>
 
           <View style={styles.form}>
-            
             <Heading style={styles.titleForm}>
               Welcome
             </Heading>
-
             <Heading mt="1" _dark={{ color: "warmGray.200" }} color="coolGray.600" fontWeight="medium" size="xs">
               Sign in to continue!
             </Heading>
-
             <VStack space={3} mt="5">
               <FormControl>
                 <FormControl.Label>Email</FormControl.Label>
@@ -87,7 +86,9 @@ export default function LoginScreen({ navigation }) {
           </View>
         </View>
       </ImageBackground>
-      <SignUpModal isVisible={isModalVisible} setIsVisible={setIsModalVisible} navigation={navigation} />
+      <Center>
+        <SignUpModal isOpen={showModal} onClose={() => setShowModal(false)} navigation={navigation} />
+      </Center>
     </NativeBaseProvider>
   );
 }
