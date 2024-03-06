@@ -42,7 +42,6 @@ export default StyleSheet.create({
 
   formMessage: {
     mt: "1",
-    _dark: { color: "warmGray.200" },
     color: "coolGray.600",
     fontWeight: "medium",
     size: "xs"
