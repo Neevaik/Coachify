@@ -74,10 +74,10 @@ export default function RegistrationModal({ isOpen, onClose, navigation }) {
                         <FormControl.Label>Height</FormControl.Label>
                         <Input value={height} onChangeText={(text) => setHeight(text)} />
                     </FormControl>
-                    <FormControl mt="3">
+                    {/* <FormControl mt="3">
                         <FormControl.Label>Activity</FormControl.Label>
                         <Input value={activity} onChangeText={(text) => setActivity(text)} />
-                    </FormControl>
+                    </FormControl> */}
                     <Box alignItems="center" w="100%">
                     <Stack space={4} alignItems="center" w="75%" maxW="300">
                         <Text textAlign="center">Activity : {onChangeValue}</Text>
