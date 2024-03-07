@@ -23,13 +23,16 @@ router.get('/getAll', async (req, res) => {
 // POST
 router.post('/signin', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const trimmedBody = tools.trimBody(req.body);
+    const {email, password} = trimmedBody;
 
-    if (!email || !password) {
+    if (!tools.checkBody(trimmedBody, ["email", "password"])) {
       return res.status(400).json({ error: 'Missing username or password' });
     }
-
-    const results = await pool.query('SELECT * FROM COACHIFY.User WHERE email = $1 AND password = $2', [email, password]);
+    if (!tools.testEmail(email)){
+      return res.status(400).json({error : 'Email format is incorrect'})
+    }
+    const results = await pool.query('SELECT user_id, name, password, birthdate, height, activity FROM COACHIFY.User WHERE email = $1 AND password = $2', [email, password]);
 
     if (results.rows.length === 0) {
       return res.status(404).json({ error: 'User not found' });
@@ -47,13 +50,17 @@ router.post('/signin', async (req, res) => {
 
 router.post('/signup', async (req, res) => {
   try {
-    const { name, email, password, birthdate, height, activity } = req.body;
+    const trimmedBody = tools.trimBody(req.body);
+    const { name, email, password, birthdate, height, activity } =trimmedBody;
 
-    if (!name || !email || !password || !birthdate || !height || !activity) {
+    if (!tools.checkBody(trimmedBody, ["name", "email", "password", "birthdate", "height", "activity"]) ||isNaN(height) ||isNaN(activity)) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
+    if (!tools.testEmail(email)){
+      return res.status(400).json({error : 'Email format is incorrect'})
+    }
 
-    const results = await pool.query('INSERT INTO COACHIFY.User (name, email, password, birthdate, height, activity) VALUES ($1, $2, $3, $4, $5, $6) RETURNING user_id',
+    const results = await pool.query('INSERT INTO COACHIFY.User (name, email, password, birthdate, height, activity) VALUES ($1, $2, $3, $4, $5, $6)',
       [name, email, password, tools.convertDate(birthdate), height, activity]);
 
     const user = results.rows[0];
@@ -65,17 +72,17 @@ router.post('/signup', async (req, res) => {
 });
 
 
-
 //PUT 
 router.put('/update', async (req, res) => {
   try {
-    const user_id = req.body.user_id;
+    const trimmedBody = tools.trimBody(req.body);
+    const {user_id} = trimmedBody;
 
-    if (!user_id || isNaN(user_id)) {
+    if (!tools.checkBody(trimmedBody, ['user_id'])|| isNaN(user_id)) {
       return res.status(400).json({ error: 'Invalid user ID' });
     }
 
-    const { name, email, password, birthdate, height, activity } = req.body;
+    const { name, email, password, birthdate, height, activity } = trimmedBody;
 
     const fieldsToUpdate = {};
     if (name) fieldsToUpdate.name = name;
@@ -111,9 +118,9 @@ router.put('/update', async (req, res) => {
 // DELETE
 router.delete('/delete', async (req, res) => {
   try {
-    const user_id = req.body.user_id;
-
-    if (!user_id || isNaN(user_id)) {
+    const trimmedBody = tools.trimBody(req.body);
+    const {user_id} = trimmedBody;
+    if (!tools.checkBody(trimmedBody, ['user_id'])|| isNaN(user_id)) {
       return res.status(400).json({ error: 'Invalid user ID' });
     }
 

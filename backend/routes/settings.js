@@ -7,8 +7,9 @@ const pool = require('../connectionString');
 //GET 
 router.get('/getByUserId', async (req, res) => {
     try {
-        const { user_id } = req.body;
-        if (!user_id || isNaN(user_id)) {
+        const trimmedBody = tools.trimBody(req.body);
+        const { user_id } =trimmedBody;
+        if (!tools.checkBody(trimmedBody, ["user_id"]) || isNaN(user_id)) {
             return res.status(400).json({ error: 'Invalid user ID' });
         }
         const results = await pool.query(`
@@ -27,13 +28,14 @@ router.get('/getByUserId', async (req, res) => {
 
 router.put('/updateByUserId', async (req, res) => {
     try {
-        const {user_id, settings_id} = req.body;
+        const trimmedBody = tools.trimBody(req.body);
+        const {user_id, settings_id} = trimmedBody;
 
-        if (!user_id || isNaN(user_id) || !settings_id || isNaN(settings_id)) {
+        if (!tools.checkBody(trimmedBody, ["user_id", "settings_id"])|| isNaN(user_id) || isNaN(settings_id)) {
             return res.status(400).json({ error: 'Invalid user ID or settings ID' });
         }
 
-        const {notification, theme, voice_coach } = req.body;
+        const {notification, theme, voice_coach } = tools.trimBody(req.body);
 
         const fieldsToUpdate = {};
         if (notification) fieldsToUpdate.notification = notification;

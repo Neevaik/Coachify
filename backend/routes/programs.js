@@ -7,9 +7,10 @@ const pool = require('../connectionString');
 // GET
 router.get('/getbyUserId', async (req, res) => {
     try {
-      const { user_id } = req.body;
+      const trimmedBody = tools.trimBody(req.body);
+      const { user_id } = trimmedBody;
   
-      if (!user_id || isNaN(user_id)) {
+      if (!tools.checkBody(trimmedBody, ["user_id"])|| isNaN(user_id)) {
         return res.status(400).json({ message: 'Invalid user ID' });
       }
   
@@ -35,6 +36,7 @@ router.get('/getbyUserId', async (req, res) => {
 
 router.post('/add', async (req, res) => {
     try {
+      const trimmedBody = tools.trimBody(req.body);
       const {
         name,
         type,
@@ -42,15 +44,10 @@ router.post('/add', async (req, res) => {
         description,
         objective,
         AI_generated,
-      } = req.body;
+      } = trimmedBody;
   
       if (
-        !name ||
-        !type ||
-        !duration ||
-        !description ||
-        !objective ||
-        typeof AI_generated !== 'boolean'
+        tools.checkBody(!tools.checkBody(trimmedBody, ["name", 'type', 'duration', 'objective', 'description', 'Ai_generated']) ||isNaN(duration))
       ) {
         return res.status(400).json({ error: 'Missing required field' });
       }
@@ -78,9 +75,10 @@ router.post('/add', async (req, res) => {
 // PUT
 router.put('/updateByUserId', async (req, res) => {
     try {
-      const { training_program_id, user_id } = req.body;
+      const trimmedBody = tools.trimBody(req.body);
+      const { training_program_id, user_id } = trimmedBody;
   
-      if (!training_program_id || isNaN(training_program_id) || !user_id || isNaN(user_id)) {
+      if (!tools.checkBody(trimmedBody, ["training_program_id", "user_id"]) || isNaN(training_program_id) || isNaN(user_id)) {
         return res.status(400).json({ error: 'Invalid program ID or user ID' });
       }
   
@@ -129,9 +127,10 @@ router.put('/updateByUserId', async (req, res) => {
 // DELETE
 router.delete('/delete', async (req, res) => {
     try {
-      const { training_program_id, user_id } = req.body;
+      const trimmedBody = tools.trimBody(req.body);
+      const { training_program_id, user_id } = trimmedBody;
   
-      if (!training_program_id || isNaN(training_program_id) || !user_id || isNaN(user_id)) {
+      if (!tools.checkBody(trimmedBody, ["training_program_id", "user_id"])|| isNaN(training_program_id) || isNaN(user_id)) {
         return res.status(400).json({ error: 'Invalid program ID or user ID' });
       }
   

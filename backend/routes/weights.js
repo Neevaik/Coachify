@@ -8,9 +8,10 @@ const pool = require('../connectionString');
 // GET
 router.get('/getAll', async (req, res) => {
   try {
-    const { user_id, startDate, endDate } = req.body;
+    const trimmedBody = tools.trimBody(req.body);
+    const { user_id, startDate, endDate } = trimmedBody;
 
-    if (!user_id || isNaN(user_id) || !startDate || !endDate) {
+    if (!tools.checkBody(trimmedBody, ['user_id', 'startDate', 'endDate']) || isNaN(user_id)) {
       return res.status(400).json({ error: 'Missing required fields' })
     }
     const query = `SELECT weight_id, weight_value, date FROM COACHIFY.Weight WHERE (user_id = $1) AND (date BETWEEN $2 AND $3)`;
@@ -33,13 +34,15 @@ router.get('/getAll', async (req, res) => {
 
 router.post('/add', async (req, res) => {
   try {
-    const { user_id, weight_value, date } = req.body;
+    const trimmedBody = tools.trimBody(req.body);
+    const { user_id, weight_value, date } = trimmedBody
 
-    if (!user_id || !weight_value || !date) {
+    if (!tools.checkBody(trimmedBody, ["user_id", "weight_value", "date"]) || isNaN(user_id) ||isNan(weight_value)) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const query = `CALL insert_weight($1, $2, $3)`;
+    const query = `INSERT INTO COACHIFY.Weight
+    (user_id, weight_value, date) VALUES($1,$2,$3);`;
     const values = [user_id, weight_value, date];
 
     await pool.query(query, values);
@@ -54,10 +57,11 @@ router.post('/add', async (req, res) => {
 // PUT
 router.put('/update', async (req, res) => {
   try {
-    const { weight_id, weight_value, date } = req.body;
+    const trimmedBody = tools.trimBody(req.body);
+    const { weight_id, weight_value, date } = trimmedBody;
 
-    if (!weight_id || isNaN(weight_id)) {
-      return res.status(400).json({ error: 'Invalid weight ID' });
+    if (!tools.checkBody(trimmedBody, ['weight_id', 'weight_value', 'date']) || isNaN(weight_id) || isNaN(weight_value)) {
+      return res.status(400).json({ error: 'Invalid required fields' });
     }
 
     const fieldsToUpdate = {};
@@ -88,9 +92,11 @@ router.put('/update', async (req, res) => {
 // DELETE
 router.delete('/delete', async (req, res) => {
   try {
-    const { weight_id, user_id } = req.body;
+    
+    const trimmedBody = tools.trimBody(req.body);
+    const { weight_id, user_id } = trimmedBody;
 
-    if (!weight_id || isNaN(weight_id) || !user_id || isNaN(user_id)) {
+    if (!tools.checkBody(trimmedBody, ['weight_id', 'user_id'])|| isNaN(weight_id) || isNaN(user_id)) {
       return res.status(400).json({ error: 'Invalid weight ID or user ID' });
     }
 

@@ -76,7 +76,6 @@ router.put('/updateByUserId', async (req, res) => {
             .map((field) => `${field} = $${Object.keys(fieldsToUpdate).indexOf(field) + 3}`)
             .join(', ');
 
-            
         const values = [ user_id, objective_id, ...Object.values(fieldsToUpdate)];
         const query = `
             UPDATE COACHIFY.Objectives
