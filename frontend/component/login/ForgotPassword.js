@@ -8,6 +8,8 @@ import { IPADDRESS, PORT } from '../../ipaddress';
 
 export default function ForgotPasswordModal({ isOpen, onClose, navigation }) {
 
+
+
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <KeyboardAvoidingView h={{
@@ -23,7 +25,8 @@ export default function ForgotPasswordModal({ isOpen, onClose, navigation }) {
                                 we’ll send a link to reset your password.
                             </Text>
                             <Input placeholder="Email Address" mt="10" mb="4" />
-                            <Button mb="4">Proceed</Button>
+                            {/* add logic to proceed */}
+                            <Button mb="4" onPress={onClose}>Proceed</Button>
                         </VStack>
                     </Box>
                 </Center>

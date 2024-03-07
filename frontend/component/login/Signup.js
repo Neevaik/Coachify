@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormControl, Input, Button, Modal, Box, Stack, Text, Slider } from "native-base";
+import { FormControl, Input, Button, Modal, Box, Stack, Text, Slider, Select } from "native-base";
 
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../../reducers/user';
@@ -11,20 +11,20 @@ export default function RegistrationModal({ isOpen, onClose, navigation }) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [birthdate, setBirthdate] = useState('');
+    const [birthdate, setBirthdate] = useState({ day: '', month: '', year: '' });
     const [height, setHeight] = useState('');
-    const [activity, setActivity] = useState('');
-    const [onChangeValue, setOnChangeValue] = useState(1);
+    const [activity, setActivity] = useState(1);
 
     const dispatch = useDispatch();
 
     const handleModalSubmit = async () => {
         try {
+            const formattedBirthdate = `${birthdate.day}/${birthdate.month}/${birthdate.year}`;
             const requestBody = {
                 name,
                 email,
                 password,
-                birthdate,
+                birthdate: formattedBirthdate,
                 height: parseInt(height),
                 activity: parseInt(activity)
             };
@@ -49,6 +49,12 @@ export default function RegistrationModal({ isOpen, onClose, navigation }) {
         onClose();
     };
 
+    const handleHeightChange = (text) => {
+        if (!isNaN(text)) {
+            setHeight(text);
+        }
+    };
+
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <Modal.Content maxWidth="400px">
@@ -69,22 +75,58 @@ export default function RegistrationModal({ isOpen, onClose, navigation }) {
                     </FormControl>
                     <FormControl mt="3">
                         <FormControl.Label>Birthdate</FormControl.Label>
-                        <Input value={birthdate} onChangeText={(text) => setBirthdate(text)} />
+                        <Stack direction="row">
+                            <Select
+                                selectedValue={birthdate.day}
+                                minWidth={100}
+                                placeholder="Day"
+                                onValueChange={(itemValue) => setBirthdate({ ...birthdate, day: itemValue })}
+                            >
+                                {[...Array(31).keys()].map((day) => (
+                                    <Select.Item key={day + 1} label={`${day + 1}`} value={`${day + 1}`} />
+                                ))}
+                            </Select>
+                            <Select
+                                selectedValue={birthdate.month}
+                                minWidth={100}
+                                placeholder="Month"
+                                onValueChange={(itemValue) => setBirthdate({ ...birthdate, month: itemValue })}
+                            >
+                                {[...Array(12).keys()].map((month) => (
+                                    <Select.Item key={month + 1} label={`${month + 1}`} value={`${month + 1}`} />
+                                ))}
+                            </Select>
+                            <Select
+                                selectedValue={birthdate.year}
+                                minWidth={100}
+                                placeholder="Year"
+                                onValueChange={(itemValue) => setBirthdate({ ...birthdate, year: itemValue })}
+                            >
+                                {[...Array(100).keys()].map((year) => (
+                                    <Select.Item key={year + 1920} label={`${year + 1920}`} value={`${year + 1920}`} />
+                                ))}
+                            </Select>
+                        </Stack>
                     </FormControl>
                     <FormControl mt="3">
                         <FormControl.Label>Height</FormControl.Label>
-                        <Input value={height} onChangeText={(text) => setHeight(text)} />
+                        <Input
+                            value={height}
+                            onChangeText={(text) => handleHeightChange(text)}
+                            keyboardType="numeric"
+                            placeholder="Enter height in cm"
+                        />
                     </FormControl>
                     <Box alignItems="center" w="100%">
                         <Stack space={4} alignItems="center" w="75%" maxW="300">
-                            <Text textAlign="center">Activity : {onChangeValue}</Text>
+                            <Text textAlign="center">Sport activity frequency : {activity}</Text>
                             <Slider
                                 defaultValue={1}
                                 minValue={1}
                                 maxValue={5}
                                 colorScheme="cyan"
-                                onChange={(v) => setOnChangeValue(Math.floor(v))}
-                                value={onChangeValue}
+                                onChange={(v) => setActivity(Math.floor(v))}
+                                value={activity}
                             >
                                 <Slider.Track>
                                     <Slider.FilledTrack />

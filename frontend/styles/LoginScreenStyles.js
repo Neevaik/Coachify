@@ -34,15 +34,11 @@ export default StyleSheet.create({
   },
 
   titleForm: {
-    size: "lg",
     fontWeight: "600",
-    color: "coolGray.800",
-    _dark: { color: "warmGray.50" }
   },
 
   formMessage: {
     mt: "1",
-    color: "coolGray.600",
     fontWeight: "medium",
     size: "xs"
   },
