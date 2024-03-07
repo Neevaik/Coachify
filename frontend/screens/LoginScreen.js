@@ -94,6 +94,8 @@ export default function LoginScreen({ navigation }) {
       </ImageBackground>
       <Center>
       <SignUpModal isOpen={showModal} onClose={() => setShowModal(false)} navigation={navigation} />
+      </Center>
+      <Center>
       <ForgotPasswordModal isOpen={forgotPassword} onClose={() => setForgotPassword(false)} navigation={navigation} />
       </Center>
     </NativeBaseProvider>
