@@ -7,7 +7,7 @@ import { updateUser } from '../../reducers/user';
 import { IPADDRESS, PORT } from '../../ipaddress';
 
 export default function RegistrationModal({ isOpen, onClose, navigation }) {
-    
+
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -76,25 +76,24 @@ export default function RegistrationModal({ isOpen, onClose, navigation }) {
                         <Input value={height} onChangeText={(text) => setHeight(text)} />
                     </FormControl>
                     <Box alignItems="center" w="100%">
-                    <Stack space={4} alignItems="center" w="75%" maxW="300">
-                        <Text textAlign="center">Activity : {onChangeValue}</Text>
-                        <Slider
-                            defaultValue={1}
-                            minValue={1}
-                            maxValue={5}
-                            colorScheme="cyan"
-                            onChange={(v) => setOnChangeValue(Math.floor(v))}
-                            value={onChangeValue}
-                        >
-                            <Slider.Track>
-                                <Slider.FilledTrack />
-                            </Slider.Track>
-                            <Slider.Thumb />
-                        </Slider>
-                    </Stack>
-                </Box>
+                        <Stack space={4} alignItems="center" w="75%" maxW="300">
+                            <Text textAlign="center">Activity : {onChangeValue}</Text>
+                            <Slider
+                                defaultValue={1}
+                                minValue={1}
+                                maxValue={5}
+                                colorScheme="cyan"
+                                onChange={(v) => setOnChangeValue(Math.floor(v))}
+                                value={onChangeValue}
+                            >
+                                <Slider.Track>
+                                    <Slider.FilledTrack />
+                                </Slider.Track>
+                                <Slider.Thumb />
+                            </Slider>
+                        </Stack>
+                    </Box>
                 </Modal.Body>
-                
                 <Modal.Footer>
                     <Button.Group space={2}>
                         <Button variant="ghost" colorScheme="blueGray" onPress={onClose}>
