@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { updateUser } from '../../reducers/user';
 
 import { IPADDRESS, PORT } from '../../ipaddress';
-
+ 
 export default function ForgotPasswordModal({ isOpen, onClose, navigation }) {
 
     return (
