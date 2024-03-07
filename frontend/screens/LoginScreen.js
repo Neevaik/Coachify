@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { updateUser } from '../reducers/user';
 
 import SignUpModal from '../component/login/Signup';
+import ForgotPasswordModal from '../component/login/ForgotPassword';
 
 import { IPADDRESS, PORT } from '../ipaddress';
 //#endregion
@@ -16,6 +17,7 @@ export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('alice@example.com');
   const [password, setPassword] = useState('password123');
   const [showModal, setShowModal] = useState(false);
+  const [forgotPassword, setForgotPassword] = useState(false);
   const dispatch = useDispatch();
 
   const handleSubmit = async () => {
@@ -43,6 +45,10 @@ export default function LoginScreen({ navigation }) {
   const handleCreateAccount = () => {
     setShowModal(true);
   };
+  
+  const handleForgotPassword = () => {
+    setForgotPassword(true);
+  };
 
   return (
     <NativeBaseProvider>
@@ -56,7 +62,7 @@ export default function LoginScreen({ navigation }) {
             <Heading style={styles.titleForm}>
               Welcome
             </Heading>
-            <Heading mt="1" _dark={{ color: "warmGray.200" }} color="coolGray.600" fontWeight="medium" size="xs">
+            <Heading mt="1" _dark={{ color: "warmGray.200" }} fontWeight="medium" size="xs">
               Sign in to continue!
             </Heading>
             <VStack space={3} mt="5">
@@ -67,7 +73,7 @@ export default function LoginScreen({ navigation }) {
               <FormControl>
                 <FormControl.Label>Password</FormControl.Label>
                 <Input type="password" value={password} onChangeText={(text) => setPassword(text)} />
-                <Link _text={{ fontSize: "xs", fontWeight: "500", color: "indigo.500" }} alignSelf="flex-end" mt="1">
+                <Link _text={{ fontSize: "xs", fontWeight: "500", color: "indigo.500" }} alignSelf="flex-end" mt="1" onPress={handleForgotPassword}>
                   Forget Password?
                 </Link>
               </FormControl>
@@ -75,7 +81,7 @@ export default function LoginScreen({ navigation }) {
                 Sign in
               </Button>
               <HStack mt="6" justifyContent="center">
-                <Text fontSize="sm" color="coolGray.600" _dark={{ color: "warmGray.200" }}>
+                <Text fontSize="sm" _dark={{ color: "warmGray.200" }}>
                   I'm a new user.{" "}
                 </Text>
                 <Link _text={{ color: "indigo.500", fontWeight: "medium", fontSize: "sm" }} onPress={handleCreateAccount}>
@@ -87,7 +93,8 @@ export default function LoginScreen({ navigation }) {
         </View>
       </ImageBackground>
       <Center>
-        <SignUpModal isOpen={showModal} onClose={() => setShowModal(false)} navigation={navigation} />
+      <SignUpModal isOpen={showModal} onClose={() => setShowModal(false)} navigation={navigation} />
+      <ForgotPasswordModal isOpen={forgotPassword} onClose={() => setForgotPassword(false)} navigation={navigation} />
       </Center>
     </NativeBaseProvider>
   );

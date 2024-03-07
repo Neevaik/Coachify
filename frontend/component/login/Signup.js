@@ -7,6 +7,7 @@ import { updateUser } from '../../reducers/user';
 import { IPADDRESS, PORT } from '../../ipaddress';
 
 export default function RegistrationModal({ isOpen, onClose, navigation }) {
+    
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -74,10 +75,6 @@ export default function RegistrationModal({ isOpen, onClose, navigation }) {
                         <FormControl.Label>Height</FormControl.Label>
                         <Input value={height} onChangeText={(text) => setHeight(text)} />
                     </FormControl>
-                    {/* <FormControl mt="3">
-                        <FormControl.Label>Activity</FormControl.Label>
-                        <Input value={activity} onChangeText={(text) => setActivity(text)} />
-                    </FormControl> */}
                     <Box alignItems="center" w="100%">
                     <Stack space={4} alignItems="center" w="75%" maxW="300">
                         <Text textAlign="center">Activity : {onChangeValue}</Text>
