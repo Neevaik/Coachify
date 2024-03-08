@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const pool = require('../connectionString');
+const { trimBody } = require('../tools');
 
 // GET
 router.get('/getAll', async (req, res) => {
@@ -17,10 +18,11 @@ router.get('/getAll', async (req, res) => {
     }
 });
 
-router.get('/getExercises', async (req, res) => {
+router.post('/getExercises', async (req, res) => {
     try {
-        const { muscle_name, muscle_group } = req.body;
-        if (!muscle_name && !muscle_group) {
+        const trimmedBody = tools.trimBody(req.body);
+        const { muscle_name, muscle_group } = trimmedBody;
+        if (!tools.checkBody(trimmedBody, ['muscle_name', 'muscle_group'])) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 

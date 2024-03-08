@@ -4,12 +4,13 @@ const tools = require('../tools');
 
 const pool = require('../connectionString');
 
-// GET
-router.get('/getByUserId', async (req, res) => {
-    try {
-        const {user_id} = req.body;
 
-        if (!user_id || isNaN(user_id)){
+router.post('/getByUserId', async (req, res) => {
+    try {
+        const trimmedBody = tools.trimBody(req.body);
+        const {user_id} = trimmedBody;
+
+        if (!tools.checkBody(trimmedBody, ['user_id']) || isNaN(user_id)){
             res.status(400).json({message : 'Invalid user ID'})
         }
 
@@ -32,9 +33,10 @@ router.get('/getByUserId', async (req, res) => {
 // POST
 router.post('/add', async(req, res) =>{
     try{
+        const trimmedBody = tools.trimBody(req.body);
         const {user_id, objective_description, weight_goal, start_date, end_date} = req.body;
         
-        if(!user_id || !objective_description ||!weight_goal || !start_date || !end_date){
+        if(!tools.checkBody(trimmedBody, ['user_id', 'objective_description', 'weight_goal', 'start_date', 'end_date'])){
             return res.status(404).json({error : 'Missing required field'})
         }
 
@@ -58,9 +60,10 @@ router.post('/add', async(req, res) =>{
 // PUT
 router.put('/updateByUserId', async (req, res) => {
     try {
-        const {user_id, objective_id} = req.body;
+        const trimmedBody = tools.trimBody(req.body);
+        const {user_id, objective_id} = trimmedBody;
 
-        if (!user_id || isNaN(user_id) || !objective_id || isNaN(objective_id)) {
+        if (!tools.checkBody(trimmedBody, ['user_id', 'objective_id'])|| isNaN(user_id) || isNaN(objective_id)) {
             return res.status(400).json({ error: 'Invalid user ID or objective ID' });
         }
 

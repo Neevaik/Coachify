@@ -4,8 +4,8 @@ const tools = require('../tools');
 
 const pool = require('../connectionString');
 
-//GET 
-router.get('/getMessages', async (req, res) => {
+// POST
+router.post('/getMessages', async (req, res) => {
     try {
         const { conversation_id, user_id } = req.body;
         if (!conversation_id || isNaN(conversation_id) || !user_id || isNaN(user_id)) {

@@ -5,8 +5,8 @@ const tools = require('../tools');
 const pool = require('../connectionString');
 
 
-// GET
-router.get('/getAll', async (req, res) => {
+// POST
+router.post('/getByUserId', async (req, res) => {
   try {
     const trimmedBody = tools.trimBody(req.body);
     const { user_id, startDate, endDate } = trimmedBody;
