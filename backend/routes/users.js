@@ -70,7 +70,13 @@ router.post('/signup', async (req, res) => {
     if (error.code === "23505"){
       res.status(500).json({error : "Email is already used"});
     }
-    res.status(500).json({ error: 'Internal server error'});
+    else if (error.constraint === 'user_password_check'){
+      res.status(500).json({error : 'Password must be at least 6 characters'})
+    }
+    else {
+      res.status(500).json({ error: 'Internal server error'});
+    }
+    
   }
 });
 
