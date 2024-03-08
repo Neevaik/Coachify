@@ -34,9 +34,9 @@ router.post('/getByUserId', async (req, res) => {
 router.post('/add', async(req, res) =>{
     try{
         const trimmedBody = tools.trimBody(req.body);
-        const {user_id, objective_description, weight_goal, start_date, end_date} = req.body;
+        const {user_id, objective_description, weight_goal, creation_date} = req.body;
         
-        if(!tools.checkBody(trimmedBody, ['user_id', 'objective_description', 'weight_goal', 'start_date', 'end_date'])){
+        if(!tools.checkBody(trimmedBody, ['user_id', 'objective_description', 'weight_goal', 'creation_date'])){
             return res.status(404).json({error : 'Missing required field'})
         }
 
@@ -44,10 +44,9 @@ router.post('/add', async(req, res) =>{
             user_id,
             objective_description,
             weight_goal,
-            start_date,
-            end_date
+            creation_date
           )
-          VALUES ($1,$2,$3,$4,$5);`, [user_id, objective_description, weight_goal, start_date, end_date])
+          VALUES ($1,$2,$3,$4,$5);`, [user_id, objective_description, weight_goal, creation_date])
 
         res.status(201).json({ message: 'Objective added successfully' });
     }
@@ -67,13 +66,12 @@ router.put('/updateByUserId', async (req, res) => {
             return res.status(400).json({ error: 'Invalid user ID or objective ID' });
         }
 
-        const {objective_description, weight_goal, start_date, end_date } = req.body;
+        const {objective_description, weight_goal, creation_date } = req.body;
 
         const fieldsToUpdate = {};
         if (objective_description) fieldsToUpdate.objective_description = objective_description;
         if (weight_goal) fieldsToUpdate.weight_goal = weight_goal;
-        if (start_date) fieldsToUpdate.start_date = tools.convertDate(start_date);
-        if (end_date) fieldsToUpdate.end_date = tools.convertDate(end_date);
+        if (creation_date) fieldsToUpdate.start_date = tools.convertDate(creation_date);
 
         const updateFieldsString = Object.keys(fieldsToUpdate)
             .map((field) => `${field} = $${Object.keys(fieldsToUpdate).indexOf(field) + 3}`)

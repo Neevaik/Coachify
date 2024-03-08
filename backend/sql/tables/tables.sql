@@ -22,26 +22,26 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Weight(
 CREATE TABLE IF NOT EXISTS COACHIFY.Objective(
         objective_id SERIAL NOT NULL,
         user_id SERIAL NOT NULL,
-        objective_description VARCHAR(40) NOT NULL,
+        objective_description VARCHAR NOT NULL,
         weight_goal FLOAT NOT NULL,
-        start_date DATE NOT NULL,
-        end_date DATE NOT NULL,
+        creation_date DATE NOT NULL,
         PRIMARY KEY(objective_id, user_id),
         FOREIGN KEY(user_id) REFERENCES COACHIFY.User(user_id) ON DELETE CASCADE ON UPDATE CASCADE);
 
 CREATE TABLE IF NOT EXISTS COACHIFY.Program(
         training_program_id SERIAL NOT NULL,
         name VARCHAR(20) NOT NULL,
-        type VARCHAR(50) NOT NULL,
-        duration INT NOT NULL, -- durée en jours
+        type VARCHAR(20) NOT NULL,
+        period INT NOT NULL, -- durée en jours
         description VARCHAR NOT NULL,
-        objective VARCHAR(30) NOT NULL, 
+        objective VARCHAR NOT NULL, 
         AI_generated BOOLEAN NOT NULL,
         PRIMARY KEY(training_program_id));
 
 CREATE TABLE IF NOT EXISTS COACHIFY.Follows_program(
         user_id SERIAL NOT NULL,
         training_program_id SERIAL NOT NULL,
+        start_date DATE NOT NULL,
         PRIMARY KEY(user_id, training_program_id),
         FOREIGN KEY(user_id) REFERENCES COACHIFY.User(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY(training_program_id) REFERENCES COACHIFY.Program(training_program_id) ON DELETE CASCADE ON UPDATE CASCADE);
@@ -49,7 +49,8 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Follows_program(
 CREATE TABLE IF NOT EXISTS COACHIFY.Workout_session(
         session_id SERIAL NOT NULL,
         training_program_id SERIAL NOT NULL,
-        duration INT NOT NULL,
+        session_rank INT NOT NULL,
+        duration INT NOT NULL,  -- durée en minutes
         location VARCHAR(20) NOT NULL, -- en salle, maison, extérieur
         description VARCHAR NOT NULL,
         PRIMARY KEY(session_id),
@@ -73,14 +74,16 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Exercise(
         description VARCHAR NOT NULL,
         video_link VARCHAR NOT NULL,
         GIF_link VARCHAR NOT NULL,
+        type VARCHAR NOT NULL, -- "reps" pour les exercices à répétition ou "secs" pour les exercices à durée
         level INT NOT NULL CHECK(level >= 1 AND level <=5), -- niveau de difficulté de l'exercice compris entre 1 et 5
         PRIMARY KEY(exercise_id));
 
 CREATE TABLE IF NOT EXISTS COACHIFY.Contains(
         session_id INT NOT NULL,
         exercise_id INT NOT NULL,
-        reps INT,
-        duration INT, -- en secondes
+        exercise_rank INT NOT NULL, -- pour indiquer le rang de l'exercice (à faire en 1er, 2e, etc...)
+        phase VARCHAR(20) NOT NULL, -- la phase de la séance à laquelle cet exercice correspond (Echauffement, étirements finaux, coeur de séance)
+        value INT NOT NULL,
         PRIMARY KEY (session_id, exercise_id),
         FOREIGN KEY(session_id) REFERENCES COACHIFY.Workout_session(session_id) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY(exercise_id) REFERENCES COACHIFY.Exercise(exercise_id) ON DELETE CASCADE ON UPDATE CASCADE);

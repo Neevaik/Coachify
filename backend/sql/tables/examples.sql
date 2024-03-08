@@ -20,12 +20,12 @@ INSERT INTO COACHIFY.Weight (user_id, weight_value, date) VALUES
   (5, 84.5, '2023-12-01');
 
 -- Table Exercise
-INSERT INTO COACHIFY.Exercise (name, description, video_link, GIF_link, level) VALUES
-('Squat', 'Exercice de musculation pour les jambes et les fessiers', 'example', 'example', 2),
-('Pompe', 'Exercice de musculation pour le haut du corps', 'example', 'example', 1),
-('Fente avant', 'Exercice de musculation pour les jambes et les fessiers', 'example', 'example', 2),
-('Crunch', 'Exercice de musculation pour les abdominaux', 'example', 'example', 1),
-('Dips', 'Exercice de musculation pour les triceps', 'example', 'example', 2);
+INSERT INTO COACHIFY.Exercise (name, description, video_link, GIF_link, level, type) VALUES
+('Squat', 'Exercice de musculation pour les jambes et les fessiers', 'example', 'example', 2, 'reps'),
+('Pompe', 'Exercice de musculation pour le haut du corps', 'example', 'example', 1,  'reps'),
+('Fente avant', 'Exercice de musculation pour les jambes et les fessiers', 'example', 'example', 2, 'reps'),
+('Crunch', 'Exercice de musculation pour les abdominaux', 'example', 'example', 1, 'reps'),
+('Dips', 'Exercice de musculation pour les triceps', 'example', 'example', 2, 'reps');
 
 -- Table Muscle
 INSERT INTO COACHIFY.Muscle (muscle_name, muscle_group, function) VALUES
@@ -69,10 +69,80 @@ INSERT INTO COACHIFY.Message (conversation_id, user_id, content, user_is_author,
 (3, 1, 'Que penses-tu de mes performances aujourd''hui ?', True, '2024-03-02 17:51:00');
 
 
--- --Table Settings
--- INSERT INTO COACHIFY.settings (user_id, notification, theme, voice_coach) VALUES
--- (1,True, True, True),
--- (2, False, False, False),
--- (3, True, False, False),
--- (4, False, False, True),
--- (5, False, True, False)
+-- Table Program
+--    Programme 1: Débutant
+INSERT INTO COACHIFY.Program (name, type, period, description, objective, AI_generated) VALUES
+('Débutant', 'Musculation', 30, 'Programme de musculation pour débutants', 'Gagner en force et en masse musculaire', True);
+
+--    Programme 2: Intermédiaire
+INSERT INTO COACHIFY.Program (name, type, period, description, objective, AI_generated) VALUES
+('Intermédiaire', 'Musculation', 30, 'Programme de musculation pour intermédiaires', 'Développer la force et la masse musculaire', True);
+
+--    Programme 3: Avancé
+INSERT INTO COACHIFY.Program (name, type, period, description, objective, AI_generated) VALUES
+('Avancé', 'Musculation', 30, 'Programme de musculation pour confirmés', 'Améliorer la performance et la définition musculaire', True);
+
+-- Table Follows_program
+INSERT INTO COACHIFY.Follows_program (user_id, training_program_id, start_date) VALUES
+(1, 1, '2024-03-08'),  -- Alice - Débutant
+(2, 2, '2024-03-08'),  -- Bob - Intermédiaire
+(3, 3, '2024-03-08'),  -- Charlie - Avancé
+(4, 1, '2024-03-01'),  -- Diana - Débutant
+(5, 2, '2024-02-15');  -- Ethan - Intermédiaire
+
+-- Table Workout_session
+
+--    Séance 1 du programme Débutant 
+INSERT INTO COACHIFY.Workout_session (training_program_id, duration, location, description, session_rank) VALUES
+(1, 30, 'En salle', 'Séance d''entraînement pour débutants', 1);
+
+--    Séance 2 du programme Débutant
+INSERT INTO COACHIFY.Workout_session (training_program_id, duration, location, description, session_rank) VALUES
+(1, 30, 'En salle', 'Séance d''entraînement pour débutants', 2);
+
+--    Séance 1 du programme Intermédiaire
+INSERT INTO COACHIFY.Workout_session (training_program_id, duration, location, description, session_rank) VALUES
+(2, 45, 'En salle', 'Séance d''entraînement pour intermédiaires', 1);
+
+-- Table Contains (contenu des workout sessions)
+
+--    Contenu de la séance 1 du programme Débutant 
+INSERT INTO COACHIFY.Contains (session_id, exercise_id, exercise_rank, phase, value) VALUES
+(1, 1, 1, 'Echauffement', 10),  -- Squat
+(1, 2, 2, 'Coeur de séance', 12),  -- Pompe
+(1, 3, 3, 'Coeur de séance', 15),  -- Fente avant
+(1, 4, 4, 'Etirement de fin', 10);  -- Crunch
+
+--    Contenu de la séance 2 du programme Débutant (
+INSERT INTO COACHIFY.Contains (session_id, exercise_id, exercise_rank, phase, value) VALUES
+(2, 1, 1, 'Echauffement', 12),  -- Squat
+(2, 2, 2, 'Coeur de séance', 15),  -- Pompe
+(2, 3, 3, 'Coeur de séance', 12),  -- Fente avant
+(2, 5, 4, 'Etirement de fin', 10);  -- Dips
+
+--    Contenu de la séance 1 du programme Intermédiaire
+INSERT INTO COACHIFY.Contains (session_id, exercise_id, exercise_rank, phase, value) VALUES
+(3, 1, 1, 'Echauffement', 15),  
+(3, 2, 2, 'Coeur de séance', 12),
+(3, 3, 3, 'Coeur de séance', 10),
+(3, 4, 4, 'Etirement de fin', 12);
+
+
+-- Table Objectives
+
+INSERT INTO COACHIFY.Objective (user_id, objective_description, weight_goal, creation_date) VALUES
+
+-- Alice (user_id 1)
+(1, 'Gagner 5 kg de masse musculaire', 75.0, CURRENT_DATE),
+
+-- Bob (user_id 2)
+(2, 'Améliorer mon endurance cardio', 20, CURRENT_DATE),
+
+-- Charlie (user_id 3)
+(3, 'Perdre 3 kg de graisse corporelle', 67.0, CURRENT_DATE),
+
+-- Diana (user_id 4)
+(4, 'Augmenter ma force musculaire', 20, CURRENT_DATE),
+
+-- Ethan (user_id 5)
+(5, 'Développer mon endurance musculaire', 20, CURRENT_DATE);
