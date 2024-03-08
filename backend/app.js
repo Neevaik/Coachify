@@ -13,6 +13,7 @@ var messagesRouter = require('./routes/messages');
 var settingsRouter = require('./routes/settings');
 var objectivesRouter = require('./routes/objectives');
 var programsRouter = require('./routes/programs');
+var sessionsRouter = require('./routes/sessions');
 
 var app = express();
 
@@ -30,6 +31,7 @@ app.use('/messages', messagesRouter);
 app.use('/settings', settingsRouter);
 app.use('/objectives', objectivesRouter);
 app.use('/programs', programsRouter);
+app.use('/sessions', sessionsRouter);
 
 app.listen(PORT, () => console.log(`App launch on port ${PORT}`))
 

@@ -67,7 +67,10 @@ router.post('/signup', async (req, res) => {
     res.status(201).json({ user });
   } catch (error) {
     console.error('Error executing query', error);
-    res.status(500).json({ error: 'Internal server error' });
+    if (error.code === "23505"){
+      res.status(500).json({error : "Email is already used"});
+    }
+    res.status(500).json({ error: 'Internal server error'});
   }
 });
 
