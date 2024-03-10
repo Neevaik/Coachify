@@ -77,7 +77,7 @@ export default function LoginScreen({ navigation }) {
                   Forget Password?
                 </Link>
               </FormControl>
-              <Button mt="2" colorScheme="#129FB5" onPress={handleSubmit}>
+              <Button mt="2" color="#129FB5" onPress={handleSubmit}>
                 Sign in
               </Button>
               <HStack mt="6" justifyContent="center">
