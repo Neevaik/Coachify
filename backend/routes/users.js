@@ -51,34 +51,38 @@ router.post('/signin', async (req, res) => {
 router.post('/signup', async (req, res) => {
   try {
     const trimmedBody = tools.trimBody(req.body);
-    const { name, email, password, birthdate, height, activity } =trimmedBody;
+    const { name, email, password, birthdate, height, activity } = trimmedBody;
 
-    if (!tools.checkBody(trimmedBody, ["name", "email", "password", "birthdate", "height", "activity"]) ||isNaN(height) ||isNaN(activity)) {
+    if (!tools.checkBody(trimmedBody, ["name", "email", "password", "birthdate", "height", "activity"]) || isNaN(height) || isNaN(activity)) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
     if (!tools.testEmail(email)){
       return res.status(400).json({error : 'Email format is incorrect'})
     }
 
-    const results = await pool.query('INSERT INTO COACHIFY.User (name, email, password, birthdate, height, activity) VALUES ($1, $2, $3, $4, $5, $6)',
+    const results = await pool.query('INSERT INTO COACHIFY.User (name, email, password, birthdate, height, activity) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
       [name, email, password, tools.convertDate(birthdate), height, activity]);
 
+    if (results.rowCount === 0) {
+      return res.status(500).json({ error: 'Failed to insert user' });
+    }
+
     const user = results.rows[0];
-    res.status(201).json({ user });
+    return res.status(201).json({ user });
   } catch (error) {
     console.error('Error executing query', error);
     if (error.code === "23505"){
-      res.status(500).json({error : "Email is already used"});
+      return res.status(500).json({error : "Email is already used"});
     }
     else if (error.constraint === 'user_password_check'){
-      res.status(500).json({error : 'Password must be at least 6 characters'})
+      return res.status(500).json({error : 'Password must be at least 6 characters'})
     }
     else {
-      res.status(500).json({ error: 'Internal server error'});
+      return res.status(500).json({ error: 'Internal server error'});
     }
-    
   }
 });
+
 
 
 //PUT 
