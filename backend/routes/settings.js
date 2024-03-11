@@ -16,7 +16,7 @@ router.post('/getByUserId', async (req, res) => {
         SELECT settings_id, user_id, notification, theme, voice_coach
         FROM COACHIFY.Settings
         WHERE user_id = $1`, [user_id]);
-        res.status(200).json(results.rows[0]);
+        return res.status(200).json(results.rows[0]);
     }
     catch (error) {
         console.error('Error getting settings', error)

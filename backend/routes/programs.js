@@ -16,19 +16,19 @@ router.post('/getbyUserId', async (req, res) => {
   
       const results = await pool.query(
         `SELECT *
-         FROM COACHIFY.Program
-         JOIN COACHIFY.Follows_program ON training_program_id.COACHIFY.Program = training.program_id.COACHIFY.Follows_program
+         FROM COACHIFY.Program as program
+         JOIN COACHIFY.Follows_program as follows_program ON program.training_program_id = follows_program.training_program_id
          WHERE user_id = $1`,
         [user_id]
       );
   
       if (results.rowCount === 0) {
-        return res.status(404).json({ error: 'Programs not found' });
+        return res.status(404).json({ error: 'No program found' });
       }
   
       res.status(200).json(results.rows);
     } catch (error) {
-      console.error('Error getting programs', error);
+      console.error('Error getting program', error);
       res.status(500).json({ message: 'Internal server error' });
     }
   });
@@ -97,7 +97,7 @@ router.put('/updateByUserId', async (req, res) => {
         period,
         description,
         AI_generated,
-      } = req.body;
+      } = trimmedBody;
   
       const fieldsToUpdate = {};
       if (name) fieldsToUpdate.name = name;

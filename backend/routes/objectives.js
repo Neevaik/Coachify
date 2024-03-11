@@ -11,18 +11,18 @@ router.post('/getByUserId', async (req, res) => {
         const {user_id} = trimmedBody;
 
         if (!tools.checkBody(trimmedBody, ['user_id']) || isNaN(user_id)){
-            res.status(400).json({message : 'Invalid user ID'})
+            return res.status(400).json({message : 'Invalid user ID'})
         }
 
-        const results = await pool.query( `SELECT objective_id, user_id, objective_description, weight_goal, starting_date
+        const results = await pool.query( `SELECT objective_id, user_id, objective, objective_description, weight_goal, starting_date
         FROM COACHIFY.Objective
         WHERE user_id = $1`, [user_id]);
 
         if (results.rowCount === 0) {
-            return res.status(404).json({ error: 'Objectives not found' });
+            return res.status(404).json({ error: 'No objective found' });
           }
       
-          res.status(200).json(results.rows);
+        return res.status(200).json(results.rows);
     }
     catch(error){
         console.error("Error getting objectives", error);
@@ -35,7 +35,7 @@ router.post('/add', async(req, res) =>{
     try{
         const trimmedBody = tools.trimBody(req.body);
         const {user_id, objective, objective_description, weight_goal, starting_date} = trimmedBody;
-        if(!tools.checkBody(trimmedBody, ['user_id', 'objective_description', 'weight_goal', 'starting_date'])){
+        if(!tools.checkBody(trimmedBody, ['user_id', 'objective', 'objective_description', 'weight_goal', 'starting_date'])){
             return res.status(404).json({error : 'Missing required field'})
         }
 
@@ -88,7 +88,7 @@ router.put('/updateByUserId', async (req, res) => {
         const updatedRows = await pool.query(query, values);
 
         if (updatedRows.rowCount === 0) {
-            res.status(400).json({ message: 'User not found' })
+            return res.status(400).json({ message: 'Could not update objective' })
         }
         return res.status(200).json({ message: 'Objective successfully updated' });
     }
@@ -102,9 +102,10 @@ router.put('/updateByUserId', async (req, res) => {
 // DELETE
 router.delete('/delete', async (req, res) => {
     try {
-        const { objective_id, user_id } = req.body;
+        const trimmedBody = tools.trimBody(req.body);
+        const { objective_id, user_id } = trimmedBody;
 
-        if (!objective_id || isNaN(objective_id) || !user_id || isNaN(user_id)) {
+        if (!tools.checkBody(trimmedBody, ["objective_id", "user_id"]) || isNaN(objective_id) || isNaN(user_id)) {
             return res.status(400).json({ error: 'Invalid objective ID or user ID' });
         }
 
@@ -119,7 +120,7 @@ router.delete('/delete', async (req, res) => {
             return res.status(404).json({ error: 'Objective data not found' });
         }
 
-        res.status(200).json({ message: 'Objective data deleted successfully' });
+        return res.status(200).json({ message: 'Objective data deleted successfully' });
     } catch (error) {
         console.error('Error deleting objective data', error);
         res.status(500).json({ error: 'Internal server error' });

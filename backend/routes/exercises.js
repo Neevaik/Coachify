@@ -18,7 +18,7 @@ router.get('/getAll', async (req, res) => {
     }
 });
 
-router.post('/getExercises', async (req, res) => {
+router.post('/getExercisesByMuscle', async (req, res) => {
     try {
         const trimmedBody = tools.trimBody(req.body);
         const { muscle_name, muscle_group } = trimmedBody;
@@ -52,7 +52,37 @@ router.post('/getExercises', async (req, res) => {
             return res.status(404).json({ error: 'Exercises not found with provided criteria' });
         }
 
-        res.status(200).json(exerciseResults.rows);
+        return res.status(200).json(exerciseResults.rows);
+    } catch (error) {
+        console.error('Error getting exercises', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+router.post('/getExercisesByEquipment', async (req, res) => {
+    try {
+        const trimmedBody = tools.trimBody(req.body);
+        const { equipment_name} = trimmedBody;
+        if (!tools.checkBody(trimmedBody, ['equipment_name'])) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        let query = `
+        SELECT exercise.exercise_id, exercise.name, exercise.description, exercise.video_link, exercise.GIF_link, exercise.level, exercise.type, exercise.MET
+        FROM COACHIFY.Exercise AS exercise
+        INNER JOIN COACHIFY.Requires AS requires ON exercise.exercise_id = requires.exercise_id
+        INNER JOIN COACHIFY.Equipment AS equipment ON requires.equipment_id = equipment.equipment_id
+        WHERE equipment.name = $1
+      `;
+
+        let values = [equipment_name];
+        const exerciseResults = await pool.query(query, values);
+
+        if (exerciseResults.rowCount === 0) {
+            return res.status(404).json({ error: 'Exercises not found with provided criteria' });
+        }
+
+        return res.status(200).json(exerciseResults.rows);
     } catch (error) {
         console.error('Error getting exercises', error);
         res.status(500).json({ error: 'Internal server error' });

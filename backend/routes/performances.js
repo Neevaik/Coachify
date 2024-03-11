@@ -4,7 +4,9 @@ const tools = require('../tools');
 
 const pool = require('../connectionString');
 
-//GET 
+
+
+//POST
 
   router.post('/getFromTo', async (req, res) => {
     try {
@@ -17,7 +19,11 @@ const pool = require('../connectionString');
       SELECT performance_id, user_id, session_id, date, feeling, calories
       FROM COACHIFY.Performs
       WHERE user_id = $1
-      AND date BETWEEN $2 AND $3;`[user_id, tools.convertDate(start_date), tools.convertDate(end_date)]);
+      AND date BETWEEN $2 AND $3;`, [user_id, tools.convertDate(start_date), tools.convertDate(end_date)]);
+
+      if (results.rowCount === 0){
+        return res.status(404).json({message : 'No performance found'})
+      }
       return res.status(200).json(results.rows);
     }
     catch (error) {
@@ -26,8 +32,6 @@ const pool = require('../connectionString');
     }
   });
 
-
-//POST
 
 
 router.post("/add", async (req, res) => {
@@ -58,6 +62,46 @@ router.post("/add", async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
+//PUT 
+
+router.put('/update', async (req, res) => {
+    try {
+      const trimmedBody = tools.trimBody(req.body);
+      const {performance_id} = trimmedBody;
+  
+      if (!tools.checkBody(trimmedBody, ['performance_id'])|| isNaN(performance_id)) {
+        return res.status(400).json({ error: 'Invalid performance ID' });
+      }
+  
+      const {date, feeling, calories} = trimmedBody;
+  
+      const fieldsToUpdate = {};
+      if (feeling) fieldsToUpdate.feeling = feeling;
+      if (calories) fieldsToUpdate.calories = calories;
+      if (date) fieldsToUpdate.date = tools.convertDate(date);
+  
+      const updateFieldsString = Object.keys(fieldsToUpdate)
+        .map((field) => `${field} = $${Object.keys(fieldsToUpdate).indexOf(field) + 2}`)
+        .join(', ');
+  
+      const values = [performance_id, ...Object.values(fieldsToUpdate)];
+  
+      const query = `UPDATE COACHIFY.Performs SET ${updateFieldsString} WHERE performance_id = $1`;
+  
+      const updatedRows = await pool.query(query, values);
+  
+      if (updatedRows.rowCount === 0) {
+        return res.status(404).json({ error: 'Performance not found' });
+      }
+  
+      res.status(200).json({ message: 'Performance updated successfully' });
+    } catch (error) {
+      console.error('Error updating user performance', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
 
 //DELETE
 router.delete("/delete", async (req, res) => {
