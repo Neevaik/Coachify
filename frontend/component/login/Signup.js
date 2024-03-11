@@ -16,39 +16,39 @@ export default function RegistrationModal({ isOpen, onClose, navigation }) {
     const [height, setHeight] = useState('');
     const [activity, setActivity] = useState(1);
 
-    const [showSurveyModal, setShowSurveyModal] = useState(false); // State for the second modal
+    const [showSurveyModal, setShowSurveyModal] = useState(false);
 
     const dispatch = useDispatch();
 
     const handleModalSubmit = async () => {
-        // try {
-        //     const formattedBirthdate = `${birthdate.day}/${birthdate.month}/${birthdate.year}`;
-        //     const requestBody = {
-        //         name,
-        //         email,
-        //         password,
-        //         birthdate: formattedBirthdate,
-        //         height: parseInt(height),
-        //         activity: parseInt(activity)
-        //     };
-        //     const response = await fetch(`http://${IPADDRESS}:${PORT}/users/signup`, {
-        //         method: "POST",
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify(requestBody)
-        //     });
-        //     const data = await response.json();
+        try {
+            const formattedBirthdate = `${birthdate.day}/${birthdate.month}/${birthdate.year}`;
+            const requestBody = {
+                name,
+                email,
+                password,
+                birthdate: formattedBirthdate,
+                height: parseInt(height),
+                activity: parseInt(activity)
+            };
+            const response = await fetch(`http://${IPADDRESS}:${PORT}/users/signup`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody)
+            });
+            const data = await response.json();
 
-        //     if (response.ok) {
-        //         dispatch(updateUser({ email, password, name }));
-        //         setShowSecondModal(true); // Show the second modal after successful submission
-        //     } else {
-        //         console.error('Error:', data.error);
-        //     }
-        // } catch (error) {
-        //     console.error('Network error:', error);
-        // }
+            if (response.ok) {
+                dispatch(updateUser({ email, password, name:data.user.name,birthdate:data.user.birthdate,activity,height ,user_id:data.user.user_id,}));
+                setShowSecondModal(true);
+            } else {
+                console.error('Error:', data.error);
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+        }
         onClose();
         setShowSurveyModal(true)
     };

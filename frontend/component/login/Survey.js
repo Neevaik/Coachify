@@ -19,8 +19,9 @@ export default function SurveyModal({ isOpen, onClose, navigation }) {
     };
 
     const handleCreate = () => {
-        dispatch(updateUser({ goal: selectedGoal, weightGoal }));
+        dispatch(updateUser({  }));
         onClose();
+        navigation.navigate('TabNavigation')
     };
 
     return (
