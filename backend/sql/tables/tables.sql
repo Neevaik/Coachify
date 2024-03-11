@@ -1,12 +1,13 @@
 DROP SCHEMA IF EXISTS COACHIFY CASCADE;
 CREATE SCHEMA COACHIFY;
 
-CREATE TYPE objective_type AS ENUM ('stay in shape', 'gain muscle', 'tone muscles','lose weight');
+CREATE TYPE objective_type AS ENUM ('To stay in shape', 'To gain muscle', 'To tone up','To lose weight');
 CREATE TYPE author_type AS ENUM('model', 'user');
 CREATE TYPE theme_type AS ENUM('light', 'dark');
 CREATE TYPE location_type AS ENUM('at home', 'outdoors', 'in the gym');
 CREATE TYPE exercise_type AS ENUM('reps', 'secs');
 CREATE TYPE session_phase AS ENUM('warm-up', 'session core', 'stretching');
+CREATE TYPE gender_type AS ENUM('M', 'F');
 
 
 CREATE TABLE IF NOT EXISTS COACHIFY.User(
@@ -16,7 +17,8 @@ CREATE TABLE IF NOT EXISTS COACHIFY.User(
         password VARCHAR(30) NOT NULL CHECK(LENGTH(password) >= 6), -- longueur minimale de 6 caractères
         birthdate DATE NOT NULL,
         height INT NOT NULL,
-        activity INT NOT NULL CHECK(activity >= 1 AND activity <=5), -- activité sportive notée entre 1 et 5 
+        activity INT NOT NULL CHECK(activity >= 1 AND activity <=5), -- activité sportive notée entre 1 et 5
+        gender gender_type NOT NULL,
         PRIMARY KEY(user_id));
 
 CREATE TABLE IF NOT EXISTS COACHIFY.Weight(
@@ -34,7 +36,7 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Objective(
         objective objective_type NOT NULL,
         objective_description VARCHAR NOT NULL,
         weight_goal FLOAT NOT NULL,
-        creation_date DATE NOT NULL,
+        starting_date DATE NOT NULL,
         PRIMARY KEY(objective_id, user_id),
         FOREIGN KEY(user_id) REFERENCES COACHIFY.User(user_id) ON DELETE CASCADE ON UPDATE CASCADE);
 
@@ -87,6 +89,7 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Exercise(
         exercise_id SERIAL NOT NULL,
         name VARCHAR(30) NOT NULL UNIQUE,
         description VARCHAR NOT NULL,
+        MET FLOAT NOT NULL, -- unité de mesure pour le calcul de la dépense énergetique Metabolic Equivalent of Task
         video_link VARCHAR NOT NULL,
         GIF_link VARCHAR NOT NULL,
         type exercise_type NOT NULL, -- "reps" pour les exercices à répétition ou "secs" pour les exercices à durée

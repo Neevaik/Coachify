@@ -1,5 +1,3 @@
-
-
 //Objective functions
 function generate_objectives(training_program_id, objectives){
   sqlStatements = [];
@@ -43,41 +41,41 @@ function generate_all_sessions(training_program_id, workout_sessions) {
 }
 
 // Example test
-const trainingProgramId = 1;
-const workoutSessions = {
-  "1": {
-    "duration": 35,
-    "location": "at home",
-    "description": "First session",
-    "contains": {
-      "1": {
-        "exercise_id": 1,
-        "phase": "warm-up",
-        "value": 10
-      },
-      "2": {
-        "exercise_id": 2,
-        "phase": "warm-up",
-        "value": 15
-      }
-    }
-  },
-  "2": {
-    "duration": 35,
-    "location": "at home",
-    "description": "Second session",
-    "contains": {
-      "1": {
-        "exercise_id": 1,
-        "phase": "warm-up",
-        "value": 10
-      }
-    }
-  }
-};
+// const trainingProgramId = 1;
+// const workoutSessions = {
+//   "1": {
+//     "duration": 35,
+//     "location": "at home",
+//     "description": "First session",
+//     "contains": {
+//       "1": {
+//         "exercise_id": 1,
+//         "phase": "warm-up",
+//         "value": 10
+//       },
+//       "2": {
+//         "exercise_id": 2,
+//         "phase": "warm-up",
+//         "value": 15
+//       }
+//     }
+//   },
+//   "2": {
+//     "duration": 35,
+//     "location": "at home",
+//     "description": "Second session",
+//     "contains": {
+//       "1": {
+//         "exercise_id": 1,
+//         "phase": "warm-up",
+//         "value": 10
+//       }
+//     }
+//   }
+// };
 
-const sqlQuery = generate_all_sessions(trainingProgramId, workoutSessions);
-console.log(sqlQuery);
+// const sqlQuery = generate_all_sessions(trainingProgramId, workoutSessions);
+// console.log(sqlQuery);
 
 function isAllKeysInteger(object) {
   for (const key in object) {
@@ -121,6 +119,9 @@ function convertDate(dateStr) {
 
   if (isAlreadyFormatted) {
     return dateStr;
+  }
+  if (dateStr === 'CURRENT_DATE'){
+    return new Date();
   }
 
   const [day, month, year] = dateStr.split('/');
@@ -181,12 +182,12 @@ function getElementsByKeyDeep(obj, key) {
 //   "type": "test",
 //   "period": 45,
 //   "description": "test",
-//   "objectives": ["lose weight", "gain muscle"],
+//   "objectives": ["To lose weight", "To gain muscle"],
 //   "AI_generated": false,
 //   "workout_sessions": {
 //     "1": {
 //       "duration": 35,
-//       "location": "Inhouse",
+//       "location": "at home",
 //       "description": "First session",
 //       "contains": {
 //         "1": {
@@ -203,7 +204,7 @@ function getElementsByKeyDeep(obj, key) {
 //     },
 //     "2": {
 //       "duration": 35,
-//       "location": "Inhouse",
+//       "location": "at home",
 //       "description": "Second session",
 //       "contains": {
 //         "1": {

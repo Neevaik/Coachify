@@ -2,13 +2,13 @@ var express = require('express');
 var router = express.Router();
 
 const pool = require('../connectionString');
-const { trimBody } = require('../tools');
+const tools = require('../tools');
 
 // GET
 router.get('/getAll', async (req, res) => {
     try {
         const results = await pool.query(`
-        SELECT exercise_id, name, description, video_link, GIF_link, level, type
+        SELECT exercise_id, name, description, video_link, GIF_link, level, type, MET
         FROM COACHIFY.Exercise`);
         res.status(200).json(results.rows);
     }
@@ -27,7 +27,7 @@ router.post('/getExercises', async (req, res) => {
         }
 
         let query = `
-        SELECT exercise.exercise_id, exercise.name, exercise.description, exercise.video_link, exercise.GIF_link, exercise.level, exercise.type
+        SELECT exercise.exercise_id, exercise.name, exercise.description, exercise.video_link, exercise.GIF_link, exercise.level, exercise.type, exercise.MET
         FROM COACHIFY.Exercise AS exercise
         INNER JOIN COACHIFY.Targets AS targets ON exercise.exercise_id = targets.exercise_id
         INNER JOIN COACHIFY.Muscle AS muscle ON targets.muscle_name = muscle.muscle_name

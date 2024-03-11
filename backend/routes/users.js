@@ -9,7 +9,7 @@ const pool = require('../connectionString');
 router.get('/getAll', async (req, res) => {
   try {
     const results = await pool.query(`
-    SELECT user_id, name, email, password, birthdate, height, activity
+    SELECT user_id, name, email, password, birthdate, height, activity, gender
     FROM COACHIFY.User`);
     res.status(200).json(results.rows);
   }
@@ -39,7 +39,7 @@ router.post('/signin', async (req, res) => {
     }
 
     const user = results.rows[0];
-    res.status(200).json({ user });
+    return res.status(200).json({ user });
   } catch (error) {
     console.error('Error executing query', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -51,17 +51,17 @@ router.post('/signin', async (req, res) => {
 router.post('/signup', async (req, res) => {
   try {
     const trimmedBody = tools.trimBody(req.body);
-    const { name, email, password, birthdate, height, activity } = trimmedBody;
+    const { name, email, password, birthdate, height, activity, gender } = trimmedBody;
 
-    if (!tools.checkBody(trimmedBody, ["name", "email", "password", "birthdate", "height", "activity"]) || isNaN(height) || isNaN(activity)) {
+    if (!tools.checkBody(trimmedBody, ["name", "email", "password", "birthdate", "height", "activity", 'gender']) || isNaN(height) || isNaN(activity)) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
     if (!tools.testEmail(email)){
       return res.status(400).json({error : 'Email format is incorrect'})
     }
 
-    const results = await pool.query('INSERT INTO COACHIFY.User (name, email, password, birthdate, height, activity) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;',
-      [name, email, password, tools.convertDate(birthdate), height, activity]);
+    const results = await pool.query('INSERT INTO COACHIFY.User (name, email, password, birthdate, height, activity, gender) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;',
+      [name, email, password, tools.convertDate(birthdate), height, activity, gender]);
 
     if (results.rowCount === 0) {
       return res.status(500).json({ error: 'Failed to insert user' });
@@ -69,6 +69,7 @@ router.post('/signup', async (req, res) => {
 
     const user = results.rows[0];
     return res.status(201).json({ user });
+
   } catch (error) {
     console.error('Error executing query', error);
     if (error.code === "23505"){
@@ -95,7 +96,7 @@ router.put('/update', async (req, res) => {
       return res.status(400).json({ error: 'Invalid user ID' });
     }
 
-    const { name, email, password, birthdate, height, activity } = trimmedBody;
+    const { name, email, password, birthdate, height, activity, gender } = trimmedBody;
 
     const fieldsToUpdate = {};
     if (name) fieldsToUpdate.name = name;
@@ -104,6 +105,7 @@ router.put('/update', async (req, res) => {
     if (birthdate) fieldsToUpdate.birthdate = tools.convertDate(birthdate);
     if (height) fieldsToUpdate.height = height;
     if (activity) fieldsToUpdate.activity = activity;
+    if (gender) fieldsToUpdate.gender = gender;
 
     const updateFieldsString = Object.keys(fieldsToUpdate)
       .map((field) => `${field} = $${Object.keys(fieldsToUpdate).indexOf(field) + 2}`)

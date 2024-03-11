@@ -14,6 +14,7 @@ var settingsRouter = require('./routes/settings');
 var objectivesRouter = require('./routes/objectives');
 var programsRouter = require('./routes/programs');
 var sessionsRouter = require('./routes/sessions');
+var performancesRouter = require('./routes/performances');
 
 var app = express();
 
@@ -32,6 +33,7 @@ app.use('/settings', settingsRouter);
 app.use('/objectives', objectivesRouter);
 app.use('/programs', programsRouter);
 app.use('/sessions', sessionsRouter);
+app.use('/performances', performancesRouter);
 
 app.listen(PORT, () => console.log(`App launch on port ${PORT}`))
 
