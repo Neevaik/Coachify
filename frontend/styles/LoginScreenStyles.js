@@ -25,6 +25,10 @@ export default StyleSheet.create({
     borderRadius: 10,
   },
 
+  heading:{
+    fontWeight:"medium",
+  },
+
   form: {
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     padding: 20,
@@ -42,4 +46,5 @@ export default StyleSheet.create({
     fontWeight: "medium",
     size: "xs"
   },
+
 })
