@@ -42,6 +42,7 @@ router.post('/add', async(req, res) =>{
 
          await pool.query(`INSERT INTO COACHIFY.Objective (
             user_id,
+            objective, 
             objective_description,
             weight_goal,
             creation_date
@@ -66,11 +67,12 @@ router.put('/updateByUserId', async (req, res) => {
             return res.status(400).json({ error: 'Invalid user ID or objective ID' });
         }
 
-        const {objective_description, weight_goal, creation_date } = req.body;
+        const {objective_description, objective, weight_goal, creation_date } = req.body;
 
         const fieldsToUpdate = {};
         if (objective_description) fieldsToUpdate.objective_description = objective_description;
         if (weight_goal) fieldsToUpdate.weight_goal = weight_goal;
+        if (objective) fieldsToUpdate.objective = objective;
         if (creation_date) fieldsToUpdate.start_date = tools.convertDate(creation_date);
 
         const updateFieldsString = Object.keys(fieldsToUpdate)

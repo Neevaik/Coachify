@@ -39,31 +39,43 @@ router.post('/addProgram', async (req, res) => {
       const trimmedBody = tools.trimBody(req.body);
       const {
         name,
-        type,
         period,
         description,
-        objective,
+        objectives,
         AI_generated,
+        workout_sessions
       } = trimmedBody;
   
-      if (!tools.checkBody(trimmedBody, ["name", 'type', 'period', 'objective', 'description', 'AI_generated']) ||isNaN(period)) {
+  
+      if (!tools.checkBody(trimmedBody, ["name", 'period', 'description', 'AI_generated', 'objectives','workout_sessions']) ||isNaN(period)) {
         return res.status(400).json({ error: 'Missing required field' });
       }
+      if(!tools.checkBodyInObject(workout_sessions, ["duration", "location", "description"])|| !tools.isAllKeysInteger(workout_sessions)){
+        return res.status(400).json({error : 'Incorrect workout_sessions format'})
+      }
+      tools.getElementsByKeyDeep(workout_sessions, "contains").forEach(element => {
+        if (!tools.checkBodyInObject(element, ['exercise_id', 'phase', 'value'])|| !tools.isAllKeysInteger(element)){
+          return res.status(400).json({error : 'Incorrect contains format'})
+        }
+        
+      });
   
-      await pool.query(
+      const results = await pool.query(
         `INSERT INTO COACHIFY.Program (
           name,
-          type,
           period,
           description,
-          objective,
           AI_generated
         )
-        VALUES ($1, $2, $3, $4, $5, $6)`,
-        [name, type, period, description, objective, AI_generated]
+        VALUES ($1, $2, $3, $4) RETURNING training_program_id`,
+        [name, period, description, AI_generated]
       );
-  
-      res.status(201).json({ message: 'Program added successfully' });
+
+      const training_program_id = results.rows[0].training_program_id;
+      const objectivesResults = await pool.query(tools.generate_objectives(training_program_id, objectives));
+      const sessionsResults = await pool.query(tools.generate_all_sessions(training_program_id, workout_sessions));
+      
+      return res.status(201).json({ message: 'Program, workout sessions and their content added successfully' });
     } catch (error) {
       console.error('Error adding program', error);
       res.status(500).json({ error: 'Internal server error' });
@@ -82,19 +94,15 @@ router.put('/updateByUserId', async (req, res) => {
   
       const {
         name,
-        type,
         period,
         description,
-        objective,
         AI_generated,
       } = req.body;
   
       const fieldsToUpdate = {};
       if (name) fieldsToUpdate.name = name;
-      if (type) fieldsToUpdate.type = type;
       if (period) fieldsToUpdate.period = period;
       if (description) fieldsToUpdate.description = description;
-      if (objective) fieldsToUpdate.objective = objective;
       if (typeof AI_generated === 'boolean') fieldsToUpdate.AI_generated = AI_generated;
   
       const updateFieldsString = Object.keys(fieldsToUpdate)
@@ -146,18 +154,18 @@ router.post("/addFollower", async (req, res) => {
 router.delete('/deleteProgram', async (req, res) => {
     try {
       const trimmedBody = tools.trimBody(req.body);
-      const { training_program_id, user_id } = trimmedBody;
+      const { training_program_id } = trimmedBody;
   
-      if (!tools.checkBody(trimmedBody, ["training_program_id", "user_id"])|| isNaN(training_program_id) || isNaN(user_id)) {
-        return res.status(400).json({ error: 'Invalid program ID or user ID' });
+      if (!tools.checkBody(trimmedBody, ["training_program_id"])|| isNaN(training_program_id)) {
+        return res.status(400).json({ error: 'Invalid program ID' });
       }
   
       const query = `
         DELETE FROM COACHIFY.Program
-        WHERE training_program_id = $1 AND user_id = $2
+        WHERE training_program_id = $1;
       `;
   
-      const values = [training_program_id, user_id];
+      const values = [training_program_id];
   
       const deletedRows = await pool.query(query, values);
   

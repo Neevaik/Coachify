@@ -12,7 +12,7 @@ router.post('/getMessages', async (req, res) => {
             res.status(400).json('Invalid conversation ID or user ID')
         }
         const query = `
-        SELECT message_id, conversation_id, user_id,content, user_is_author, timestamp
+        SELECT message_id, conversation_id, user_id,content, author, timestamp
         FROM COACHIFY.Message
         WHERE conversation_id = $1 AND user_id = $2;`;
 

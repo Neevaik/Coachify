@@ -1,6 +1,14 @@
 DROP SCHEMA IF EXISTS COACHIFY CASCADE;
 CREATE SCHEMA COACHIFY;
 
+CREATE TYPE objective_type AS ENUM ('stay in shape', 'gain muscle', 'tone muscles','lose weight');
+CREATE TYPE author_type AS ENUM('model', 'user');
+CREATE TYPE theme_type AS ENUM('light', 'dark');
+CREATE TYPE location_type AS ENUM('at home', 'outdoors', 'in the gym');
+CREATE TYPE exercise_type AS ENUM('reps', 'secs');
+CREATE TYPE session_phase AS ENUM('warm-up', 'session core', 'stretching');
+
+
 CREATE TABLE IF NOT EXISTS COACHIFY.User(
         user_id SERIAL NOT NULL,
         name VARCHAR(20) NOT NULL,
@@ -19,9 +27,11 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Weight(
         PRIMARY KEY(weight_id, user_id),
         FOREIGN KEY (user_id) REFERENCES COACHIFY.User(user_id) ON DELETE CASCADE ON UPDATE CASCADE);
 
+
 CREATE TABLE IF NOT EXISTS COACHIFY.Objective(
         objective_id SERIAL NOT NULL,
         user_id SERIAL NOT NULL,
+        objective objective_type NOT NULL,
         objective_description VARCHAR NOT NULL,
         weight_goal FLOAT NOT NULL,
         creation_date DATE NOT NULL,
@@ -31,12 +41,17 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Objective(
 CREATE TABLE IF NOT EXISTS COACHIFY.Program(
         training_program_id SERIAL NOT NULL,
         name VARCHAR(20) NOT NULL,
-        type VARCHAR(20) NOT NULL,
         period INT NOT NULL, -- durée en jours
         description VARCHAR NOT NULL,
-        objective VARCHAR NOT NULL, 
         AI_generated BOOLEAN NOT NULL,
         PRIMARY KEY(training_program_id));
+
+CREATE TABLE IF NOT EXISTS COACHIFY.Program_objectives(
+        training_program_id SERIAL NOT NULL,
+        objective objective_type NOT NULL,
+        PRIMARY KEY (training_program_id, objective),
+        FOREIGN KEY (training_program_id) REFERENCES COACHIFY.Program(training_program_id) ON DELETE CASCADE ON UPDATE CASCADE);
+
 
 CREATE TABLE IF NOT EXISTS COACHIFY.Follows_program(
         user_id SERIAL NOT NULL,
@@ -51,7 +66,7 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Workout_session(
         training_program_id SERIAL NOT NULL,
         session_rank INT NOT NULL,
         duration INT NOT NULL,  -- durée en minutes
-        location VARCHAR(20) NOT NULL, -- en salle, maison, extérieur
+        location location_type NOT NULL, -- en salle, maison, extérieur
         description VARCHAR NOT NULL,
         PRIMARY KEY(session_id),
         FOREIGN KEY(training_program_id) REFERENCES COACHIFY.Program(training_program_id) ON DELETE CASCADE ON UPDATE CASCADE);
@@ -61,7 +76,7 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Performs(
         user_id SERIAL NOT NULL,
         session_id SERIAL NOT NULL,
         date DATE NOT NULL,
-        feeling INT NOT NULL,
+        feeling INT NOT NULL CHECK(feeling >= 1 AND feeling <=5),
         calories INT NOT NULL,
         PRIMARY KEY(performance_id, user_id, session_id),
         FOREIGN KEY(user_id) REFERENCES COACHIFY.User(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -74,7 +89,7 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Exercise(
         description VARCHAR NOT NULL,
         video_link VARCHAR NOT NULL,
         GIF_link VARCHAR NOT NULL,
-        type VARCHAR NOT NULL, -- "reps" pour les exercices à répétition ou "secs" pour les exercices à durée
+        type exercise_type NOT NULL, -- "reps" pour les exercices à répétition ou "secs" pour les exercices à durée
         level INT NOT NULL CHECK(level >= 1 AND level <=5), -- niveau de difficulté de l'exercice compris entre 1 et 5
         PRIMARY KEY(exercise_id));
 
@@ -82,7 +97,7 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Contains(
         session_id INT NOT NULL,
         exercise_id INT NOT NULL,
         exercise_rank INT NOT NULL, -- pour indiquer le rang de l'exercice (à faire en 1er, 2e, etc...)
-        phase VARCHAR(20) NOT NULL, -- la phase de la séance à laquelle cet exercice correspond (Echauffement, étirements finaux, coeur de séance)
+        phase session_phase NOT NULL, -- la phase de la séance à laquelle cet exercice correspond (Echauffement, étirements finaux, coeur de séance)
         value INT NOT NULL,
         PRIMARY KEY (session_id, exercise_id),
         FOREIGN KEY(session_id) REFERENCES COACHIFY.Workout_session(session_id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -126,7 +141,7 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Message(
         conversation_id SERIAL NOT NULL,
         user_id SERIAL NOT NULL,
         content VARCHAR NOT NULL,
-        user_is_author BOOLEAN NOT NULL, -- False pour modèle, True pour utilisateur
+        author author_type NOT NULL, -- False pour modèle, True pour utilisateur
         timestamp TIMESTAMP NOT NULL,
         PRIMARY KEY (message_id, conversation_id, user_id),
         FOREIGN KEY(conversation_id, user_id) REFERENCES COACHIFY.Conversation(conversation_id, user_id) ON DELETE CASCADE ON UPDATE CASCADE);
@@ -135,7 +150,7 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Settings(
         settings_id SERIAL NOT NULL,
         user_id SERIAL NOT NULL,
         notification BOOLEAN NOT NULL,
-        theme BOOLEAN NOT NULL,
+        theme theme_type NOT NULL,
         voice_coach BOOLEAN NOT NULL,
         PRIMARY KEY (settings_id),
         FOREIGN KEY (user_id) REFERENCES COACHIFY.User(user_id) ON DELETE CASCADE ON UPDATE CASCADE);

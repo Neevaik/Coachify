@@ -60,11 +60,12 @@ router.post('/signup', async (req, res) => {
       return res.status(400).json({error : 'Email format is incorrect'})
     }
 
-    const results = await pool.query('INSERT INTO COACHIFY.User (name, email, password, birthdate, height, activity) VALUES ($1, $2, $3, $4, $5, $6)',
+    const results = await pool.query('INSERT INTO COACHIFY.User (name, email, password, birthdate, height, activity) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;',
       [name, email, password, tools.convertDate(birthdate), height, activity]);
 
+      console.log(results);
     const user = results.rows[0];
-    res.status(201).json({ user });
+    return res.status(201).json({ user });
   } catch (error) {
     console.error('Error executing query', error);
     if (error.code === "23505"){

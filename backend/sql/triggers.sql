@@ -2,7 +2,7 @@
 CREATE or REPLACE FUNCTION create_settings_trigger() RETURNS trigger AS $$
 BEGIN
     INSERT INTO COACHIFY.Settings (user_id, notification, theme, voice_coach) VALUES
-    (NEW.user_id,True, True, True);
+    (NEW.user_id,True, 'dark', True);
 	RAISE NOTICE 'Created settings for user_id : %', NEW.user_id;
     RETURN NEW;
 END; $$ LANGUAGE plpgsql;
