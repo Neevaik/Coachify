@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Performs(
         session_id SERIAL NOT NULL,
         date DATE NOT NULL,
         feeling INT NOT NULL CHECK(feeling >= 1 AND feeling <=5),
-        calories INT NOT NULL,
+        calories FLOAT NOT NULL,
         PRIMARY KEY(performance_id, user_id, session_id),
         FOREIGN KEY(user_id) REFERENCES COACHIFY.User(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY(session_id) REFERENCES COACHIFY.Workout_session(session_id) ON DELETE CASCADE ON UPDATE CASCADE);

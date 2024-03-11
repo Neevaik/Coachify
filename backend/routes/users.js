@@ -32,7 +32,7 @@ router.post('/signin', async (req, res) => {
     if (!tools.testEmail(email)){
       return res.status(400).json({error : 'Email format is incorrect'})
     }
-    const results = await pool.query('SELECT user_id, name, password, birthdate, height, activity FROM COACHIFY.User WHERE email = $1 AND password = $2', [email, password]);
+    const results = await pool.query('SELECT user_id, name, password, birthdate, height, activity, gender FROM COACHIFY.User WHERE email = $1 AND password = $2', [email, password]);
 
     if (results.rows.length === 0) {
       return res.status(404).json({ error: 'User not found' });
