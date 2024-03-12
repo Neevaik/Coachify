@@ -5,6 +5,12 @@ const location = "us-central1";
 
 const vertexAI = new VertexAI({ project: projectId, location: location });
 
+
+
+function getUserInfo(user_id){
+
+};
+
 async function generateExercises(user, workoutSession) {
   const request = {
     contents: [
@@ -66,3 +72,8 @@ async function main() {
 }
 
 main();
+
+
+module.exports = {
+  getUserInfo
+};

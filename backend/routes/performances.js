@@ -6,11 +6,11 @@ const pool = require('../connectionString');
 
 
 
-//POST
+//GET
 
-  router.post('/getFromTo', async (req, res) => {
+  router.get('/getFromTo', async (req, res) => {
     try {
-        const trimmedBody = tools.trimBody(req.body);
+        const trimmedBody = tools.trimBody(req.query);
         const {user_id, start_date, end_date} = trimmedBody;
         if(!tools.checkBody(trimmedBody, ["user_id", 'start_date', 'end_date']) || isNaN(user_id)){
             return res.status(400).json({message : "Missing required fields"})

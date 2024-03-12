@@ -4,10 +4,10 @@ const tools = require('../tools');
 
 const pool = require('../connectionString');
 
-// POST
-router.post('/getbyUserId', async (req, res) => {
+// GET
+router.get('/getbyUserId', async (req, res) => {
     try {
-      const trimmedBody = tools.trimBody(req.body);
+      const trimmedBody = tools.trimBody(req.query);
       const { user_id } = trimmedBody;
   
       if (!tools.checkBody(trimmedBody, ["user_id"])|| isNaN(user_id)) {
@@ -33,7 +33,7 @@ router.post('/getbyUserId', async (req, res) => {
     }
   });
   
-
+// POST
 router.post('/addProgram', async (req, res) => {
     try {
       const trimmedBody = tools.trimBody(req.body);
