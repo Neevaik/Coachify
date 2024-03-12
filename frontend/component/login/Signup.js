@@ -13,10 +13,10 @@ export default function RegistrationModal({ isOpen, onClose, navigation }) {
     const [name, setName] = useState('');
     const [maleChecked, setMaleChecked] = useState(false);
     const [femaleChecked, setFemaleChecked] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [birthdate, setBirthdate] = useState({ day: '', month: '', year: '' });
-    const [height, setHeight] = useState('');
+    const [email, setEmail] = useState('@example.com');
+    const [password, setPassword] = useState('password123');
+    const [birthdate, setBirthdate] = useState({ day: '02', month: '04', year: '2000' });
+    const [height, setHeight] = useState('180');
     const [activity, setActivity] = useState(1);
     const [showSurveyModal, setShowSurveyModal] = useState(false);
     const [error, setError] = useState('');
@@ -65,6 +65,8 @@ export default function RegistrationModal({ isOpen, onClose, navigation }) {
             console.error('Network error:', error);
         }
     };
+
+    
 
     const handleHeightChange = (text) => {
         if (!isNaN(text)) {
