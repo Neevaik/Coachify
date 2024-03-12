@@ -5,9 +5,9 @@ const tools = require('../tools');
 const pool = require('../connectionString');
 
 // POST
-router.post('/getMessages', async (req, res) => {
+router.get('/getMessages', async (req, res) => {
     try {
-        const trimmedBody = tools.trimBody(req.body)
+        const trimmedBody = tools.trimBody(req.query)
         const { conversation_id, user_id } = trimmedBody;
         if (!tools.checkBody(trimmedBody, ["conversation_id", "user_id"]) || isNaN(conversation_id) || isNaN(user_id)) {
             res.status(400).json('Invalid conversation ID or user ID')
@@ -28,7 +28,7 @@ router.post('/getMessages', async (req, res) => {
         return res.status(200).json(results.rows);
     } catch (error) {
         console.error('Error getting conversation messages for user', error);
-        throw error;
+        return res.status(500).json({message : 'Internal server error'})
     }
 }
 )

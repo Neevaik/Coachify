@@ -5,10 +5,39 @@ const tools = require('../tools');
 const pool = require('../connectionString');
 
 
-// POST
-router.post('/getByUserId', async (req, res) => {
+// GET
+router.get('/getLastByUserId', async (req, res) => {
   try {
-    const trimmedBody = tools.trimBody(req.body);
+    const trimmedBody = tools.trimBody(req.query);
+    const { user_id } = trimmedBody;
+
+    if (!tools.checkBody(trimmedBody, ['user_id']) || isNaN(user_id)) {
+      return res.status(400).json({ error: 'Missing required fields' })
+    }
+    const query = `SELECT weight_id, weight_value, date FROM COACHIFY.Weight 
+    WHERE user_id = $1
+    ORDER BY date DESC
+    LIMIT 1`;
+    const values = [user_id];
+
+    const weightResults = await pool.query(query, values);
+
+    if (weightResults.rowCount === 0) {
+      return res.status(404).json({ error: 'Weight data not found' });
+    }
+    res.status(200).json(weightResults.rows);
+
+
+  }
+  catch (error) {
+    console.error('Error getting weight data', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.get('/getByUserId', async (req, res) => {
+  try {
+    const trimmedBody = tools.trimBody(req.query);
     const { user_id, startDate, endDate } = trimmedBody;
 
     if (!tools.checkBody(trimmedBody, ['user_id', 'startDate', 'endDate']) || isNaN(user_id)) {

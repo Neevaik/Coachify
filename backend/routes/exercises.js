@@ -18,9 +18,9 @@ router.get('/getAll', async (req, res) => {
     }
 });
 
-router.post('/getExercisesByMuscle', async (req, res) => {
+router.get('/getExercisesByMuscle', async (req, res) => {
     try {
-        const trimmedBody = tools.trimBody(req.body);
+        const trimmedBody = tools.trimBody(req.query);
         const { muscle_name, muscle_group } = trimmedBody;
         if (!tools.checkBody(trimmedBody, ['muscle_name', 'muscle_group'])) {
             return res.status(400).json({ error: 'Missing required fields' });
@@ -59,9 +59,9 @@ router.post('/getExercisesByMuscle', async (req, res) => {
     }
 });
 
-router.post('/getExercisesByEquipment', async (req, res) => {
+router.get('/getExercisesByEquipment', async (req, res) => {
     try {
-        const trimmedBody = tools.trimBody(req.body);
+        const trimmedBody = tools.trimBody(req.query);
         const { equipment_name} = trimmedBody;
         if (!tools.checkBody(trimmedBody, ['equipment_name'])) {
             return res.status(400).json({ error: 'Missing required fields' });

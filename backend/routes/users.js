@@ -129,7 +129,6 @@ router.put('/update', async (req, res) => {
 });
 
 
-
 // DELETE
 router.delete('/delete', async (req, res) => {
   try {

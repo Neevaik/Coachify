@@ -4,10 +4,10 @@ const tools = require('../tools')
 
 const pool = require('../connectionString');
 
-// POST
-router.post('/getByUserId', async (req, res) => {
+// GET
+router.get('/getByUserId', async (req, res) => {
     try {
-        const trimmedBody = tools.trimBody(req.body);
+        const trimmedBody = tools.trimBody(req.query);
         const { user_id } =trimmedBody;
         if (!tools.checkBody(trimmedBody, ["user_id"]) || isNaN(user_id)) {
             return res.status(400).json({ error: 'Invalid user ID' });
