@@ -13,7 +13,7 @@ router.get("/getAll", async (req, res) => {
             FROM COACHIFY.Equipment;
             `
         )
-        res.status(200).json(results.rows);
+        return res.status(200).json(results.rows);
     }
     catch(error){
         console.error('Error getting equipment list', error);

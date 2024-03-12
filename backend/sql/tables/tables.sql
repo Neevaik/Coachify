@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Objective(
         user_id SERIAL NOT NULL,
         objective objective_type NOT NULL,
         objective_description VARCHAR NOT NULL,
+        location location_type NOT NULL, 
         weight_goal FLOAT NOT NULL,
         starting_date DATE NOT NULL,
         PRIMARY KEY(objective_id, user_id),
