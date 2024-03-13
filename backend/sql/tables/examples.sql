@@ -134,20 +134,20 @@ INSERT INTO COACHIFY.Contains (session_id, exercise_id, exercise_rank, phase, va
 
 -- Table Objectives
 
-INSERT INTO COACHIFY.Objective (user_id, objective, objective_description, weight_goal, starting_date) VALUES
+INSERT INTO COACHIFY.Objective (user_id, objective, objective_description, location,  weight_goal, starting_date) VALUES
 
 -- Alice (user_id 1)
-(1, 'To gain muscle', 'Gagner 5 kg de masse musculaire', 75.0, CURRENT_DATE),
+(1, 'To gain muscle', 'Gagner 5 kg de masse musculaire', 'at home',75.0, CURRENT_DATE),
 
 -- Bob (user_id 2)
-(2, 'To stay in shape', 'Améliorer mon endurance cardio', 20, CURRENT_DATE),
+(2, 'To stay in shape', 'Améliorer mon endurance cardio', 'at home',20, CURRENT_DATE),
 
 -- Charlie (user_id 3)
-(3,'To lose weight' , 'Perdre 3 kg de graisse corporelle', 67.0, CURRENT_DATE),
+(3,'To lose weight' , 'Perdre 3 kg de graisse corporelle', 'at home',67.0, CURRENT_DATE),
 
 -- Diana (user_id 4)
-(4, 'To tone up', 'Augmenter ma force musculaire', 20, CURRENT_DATE),
+(4, 'To tone up', 'Augmenter ma force musculaire', 'at home',20, CURRENT_DATE),
 
 -- Ethan (user_id 5)
-(5, 'To gain muscle', 'Développer mon endurance musculaire', 20, CURRENT_DATE),
-(5, 'To tone up', 'Développer mon endurance musculaire', 20, CURRENT_DATE);
+(5, 'To gain muscle', 'Développer mon endurance musculaire', 'at home',20, CURRENT_DATE),
+(5, 'To tone up', 'Développer mon endurance musculaire', 'at home',20, CURRENT_DATE);

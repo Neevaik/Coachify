@@ -1,4 +1,5 @@
 const { VertexAI } = require("@google-cloud/vertexai");
+const pool = require('../connectionString');
 
 const projectId = "pure-league-414700";
 const location = "us-central1";
@@ -7,8 +8,21 @@ const vertexAI = new VertexAI({ project: projectId, location: location });
 
 
 
-function getUserInfo(user_id){
+async function getUserInfo(user_id){
+  try {
+    const user_info = {};
+    const results = await pool.query(`SELECT user_table.user_id, gender, height, activity, objective, objective_description, weight_value, weight_goal, (CURRENT_DATE - birthdate)/365 AS age, location
+    FROM coachify.user user_table
+    JOIN coachify.objective objective ON user_table.user_id = objective.user_id
+    JOIN coachify.weight weight ON user_table.user_id = weight.user_id
+    ORDER BY weight.date ASC; `)
+  }
+  catch(error){
+    console.error("Error :", error);
+  }
+  
 
+  return user_info
 };
 
 async function generateExercises(user, workoutSession) {
