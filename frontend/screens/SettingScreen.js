@@ -74,7 +74,7 @@ export default function SettingScreen({ navigation }) {
   };
 
   return (
-    
+
     <NativeBaseProvider >
       <Modal isOpen={updateModalVisible} onClose={handleModalCancel} avoidKeyboard justifyContent="center" bottom="4" size="lg" alignItems="center">
         <Modal.Content>
@@ -108,7 +108,7 @@ export default function SettingScreen({ navigation }) {
                   <Popover.Footer justifyContent="center">
                     <Button.Group space={2}>
                       <Button onPress={handleModalSubmit}>Confirm update</Button>
-                      <Button onPress={()=> setPopoverOpen(false)} colorScheme="danger" variant="ghost">
+                      <Button onPress={() => setPopoverOpen(false)} colorScheme="danger" variant="ghost">
                         Cancel
                       </Button>
                     </Button.Group>
@@ -127,12 +127,12 @@ export default function SettingScreen({ navigation }) {
           <Button onPress={() => { setUpdateModalVisible(!updateModalVisible) }} leftIcon={<Icon as={AntDesign} name='profile' size={ICONSIZE} color="white" />} rightIcon={<ChevronRightIcon />}>
             My profile
           </Button>
-          <Button variant="outline"  leftIcon={<Icon as={Ionicons} name='settings-sharp' size={ICONSIZE} />} rightIcon={<ChevronRightIcon />}>
+          <Button variant="outline" leftIcon={<Icon as={Ionicons} name='settings-sharp' size={ICONSIZE} />} rightIcon={<ChevronRightIcon />}>
             General settings
           </Button>
         </Button.Group>
       </Center>
     </NativeBaseProvider>
-    
+
   );
 }

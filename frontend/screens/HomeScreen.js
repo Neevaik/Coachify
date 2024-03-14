@@ -1,10 +1,13 @@
-import { Text, NativeBaseProvider, Box, Button, HStack, VStack, Image, ScrollView } from "native-base";
 import React, { useState, useEffect } from 'react';
+import { NativeBaseProvider, Box, Text, Stack, AspectRatio, Image, Center, Heading, Button, ScrollView } from "native-base";
 import { useSelector } from 'react-redux';
 import { IPADDRESS, PORT } from '../ipaddress';
 import { TouchableOpacity } from 'react-native';
 
+import data from '../data';
+
 export default function HomeScreen() {
+
   const user = useSelector(state => state.user);
   const [objectives, setObjectives] = useState([]);
   const [error, setError] = useState(null);
@@ -27,57 +30,53 @@ export default function HomeScreen() {
     fetchObjectives();
   }, []);
 
-  const data = [
-    { id: 1, title: 'Exercice 1', duration: '30 min', calories: 150, image: 'https://medias.pourlascience.fr/api/v1/images/view/5d1b663a8fe56f77c8671165/wide_1300/image.jpg' },
-    { id: 2, title: 'Exercice 2', duration: '45 min', calories: 200, image: 'https://medias.pourlascience.fr/api/v1/images/view/5d1b663a8fe56f77c8671165/wide_1300/image.jpg' },
-    { id: 3, title: 'Exercice 3', duration: '20 min', calories: 100, image: 'https://medias.pourlascience.fr/api/v1/images/view/5d1b663a8fe56f77c8671165/wide_1300/image.jpg' },
-    { id: 4, title: 'Exercice 4', duration: '20 min', calories: 100, image: 'https://medias.pourlascience.fr/api/v1/images/view/5d1b663a8fe56f77c8671165/wide_1300/image.jpg' },
-    { id: 5, title: 'Exercice 5', duration: '20 min', calories: 100, image: 'https://medias.pourlascience.fr/api/v1/images/view/5d1b663a8fe56f77c8671165/wide_1300/image.jpg' },
-    { id: 6, title: 'Exercice 6', duration: '20 min', calories: 100, image: 'https://medias.pourlascience.fr/api/v1/images/view/5d1b663a8fe56f77c8671165/wide_1300/image.jpg' },
-    { id: 7, title: 'Exercice 7', duration: '20 min', calories: 100, image: 'https://medias.pourlascience.fr/api/v1/images/view/5d1b663a8fe56f77c8671165/wide_1300/image.jpg' },
-  ];
-
   const handleExerciseSelect = (exercise) => {
     setSelectedExercise(exercise);
   };
 
   return (
     <NativeBaseProvider>
-      <VStack space={4} alignItems="center">
-        {objectives.map((objective, index) => (
-          <Text key={index}>Your goal is : {objective.objective}</Text>
-        ))}
-        {error && <Text>Error: {error}</Text>}
-        <Text>Your progam :</Text>
+      <Text alignContent="center">Your program for the week :</Text>
+      <Stack space={4}>
         <ScrollView horizontal={true} style={{ width: '100%' }}>
-          <HStack space={4} alignItems="center">
+          <Stack space={4} direction="row">
             {data.map(item => (
               <TouchableOpacity key={item.id} onPress={() => handleExerciseSelect(item)}>
-                <Box width="250px" borderWidth="1px" borderRadius="lg" overflow="hidden">
-                  <Image source={{ uri: item.image }} alt="Exercise" height="150px" width="100%" />
-                  <Box p="4">
-                    <Text fontWeight="bold" fontSize="lg">{item.title}</Text>
-                    <Text>Duration: {item.duration}</Text>
-                    <Text>Calories: {item.calories}</Text>
+                <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{ borderColor: "coolGray.600", backgroundColor: "gray.700" }} _web={{ shadow: 2, borderWidth: 0 }} _light={{ backgroundColor: "gray.50" }}>
+                  <Box>
+                    <AspectRatio w="100%" ratio={16 / 9}>
+                      <Image source={{ uri: item.image }} alt="image" />
+                    </AspectRatio>
+                    <Center bg="violet.500" _dark={{ bg: "violet.400" }} _text={{ color: "warmGray.50", fontWeight: "700", fontSize: "xs" }} position="absolute" bottom="0" px="3" py="1.5">
+                      {item.Day}
+                    </Center>
                   </Box>
+                  <Stack p="2" space={2}>
+                    <Heading size="sm" ml="-1">
+                      {item.session}
+                    </Heading>
+                    <Text fontSize="xs" _light={{ color: "violet.500" }} _dark={{ color: "violet.400" }} fontWeight="500" ml="-0.5" mt="-1">
+                      {item.duration}
+                    </Text>
+                  </Stack>
                 </Box>
               </TouchableOpacity>
             ))}
-          </HStack>
+          </Stack>
         </ScrollView>
-      </VStack>
 
-      {selectedExercise && (
-        <Box>
-          <Text>Selected Exercise:</Text>
-          <Text>{selectedExercise.title}</Text>
-          <Text>Duration: {selectedExercise.duration}</Text>
-          <Text>Calories: {selectedExercise.calories}</Text>
-        </Box>
-      )}
-      <Box alignItems="center">
-        <Button>Start session</Button>
-      </Box>
+        {selectedExercise && (
+          <Box>
+            <Text>Selected Exercise:</Text>
+            <Text>{selectedExercise.session}</Text>
+            <Text>Duration: {selectedExercise.duration}</Text>
+            <Text>Calories: {selectedExercise.calories}</Text>
+          </Box>
+        )}
+        <Center>
+          <Button>Start session</Button>
+        </Center>
+      </Stack>
     </NativeBaseProvider>
   );
 }
