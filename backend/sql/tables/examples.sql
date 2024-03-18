@@ -97,16 +97,16 @@ INSERT INTO COACHIFY.Follows_program (user_id, training_program_id, start_date) 
 -- Table Workout_session
 
 --    Séance 1 du programme Débutant 
-INSERT INTO COACHIFY.Workout_session (training_program_id, duration, location, description, session_rank) VALUES
-(1, 30, 'in the gym', 'Séance d''entraînement pour débutants', 1);
+INSERT INTO COACHIFY.Workout_session (training_program_id, duration, title, location, description, session_rank) VALUES
+(1, 30, 'D_Seance 1','in the gym', 'Séance d''entraînement pour débutants', 1);
 
 --    Séance 2 du programme Débutant
-INSERT INTO COACHIFY.Workout_session (training_program_id, duration, location, description, session_rank) VALUES
-(1, 30, 'in the gym', 'Séance d''entraînement pour débutants', 2);
+INSERT INTO COACHIFY.Workout_session (training_program_id, duration, title, location, description, session_rank) VALUES
+(1, 30, 'D_Seance 2', 'in the gym', 'Séance d''entraînement pour débutants', 2);
 
 --    Séance 1 du programme Intermédiaire
-INSERT INTO COACHIFY.Workout_session (training_program_id, duration, location, description, session_rank) VALUES
-(2, 45, 'in the gym', 'Séance d''entraînement pour intermédiaires', 1);
+INSERT INTO COACHIFY.Workout_session (training_program_id, duration, title, location, description, session_rank) VALUES
+(2, 45, 'I_Seance 1', 'in the gym', 'Séance d''entraînement pour intermédiaires', 1);
 
 -- Table Contains (contenu des workout sessions)
 

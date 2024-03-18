@@ -17,8 +17,8 @@ function generate_session(training_program_id, session_rank, workout_session){
     DO $$
     DECLARE session_id_var integer;
     BEGIN
-      INSERT INTO COACHIFY.Workout_session (training_program_id, duration, location, description, session_rank)
-      VALUES (${training_program_id}, ${workout_session.duration}, '${workout_session.location}', '${workout_session.description}', ${parseInt(session_rank)}) RETURNING session_id INTO session_id_var;
+      INSERT INTO COACHIFY.Workout_session (training_program_id, title, duration, location, description, session_rank)
+      VALUES (${training_program_id},'${workout_session.title}', ${workout_session.duration}, '${workout_session.location}', '${workout_session.description}', ${parseInt(session_rank)}) RETURNING session_id INTO session_id_var;
   `;
   sqlParts.push(sqlTemplate);
   for (const exercise_rank in workout_session.contains){
@@ -44,6 +44,7 @@ function generate_all_sessions(training_program_id, workout_sessions) {
 // const trainingProgramId = 1;
 // const workoutSessions = {
 //   "1": {
+//     "title" : "Title 1"
 //     "duration": 35,
 //     "location": "at home",
 //     "description": "First session",
@@ -61,6 +62,7 @@ function generate_all_sessions(training_program_id, workout_sessions) {
 //     }
 //   },
 //   "2": {
+//     "title" : "Title 2"
 //     "duration": 35,
 //     "location": "at home",
 //     "description": "Second session",
@@ -219,6 +221,179 @@ function getElementsByKeyDeep(obj, key) {
 
 
 // console.log(getElementsByKeyDeep(program_request_test, 'contains'));
+function convertProgramToJson(table) {
+  const programs = {};
+
+  for (const row of table) {
+      const {
+          training_program_id,
+          session_title,
+          session_duration,
+          session_id,
+          session_rank,
+          exercise_name,
+          exercise_rank,
+          phase,
+          value,
+          exercise_type,
+          location,
+          gif_link,
+          video_link
+      } = row;
+
+      if (!programs[training_program_id]) {
+          programs[training_program_id] = {
+              sessions: {}
+          };
+      }
+
+      if (!programs[training_program_id].sessions[session_id]) {
+          programs[training_program_id].sessions[session_id] = {
+              session_title,
+              session_duration,
+              exercises: {}
+          };
+      }
+
+      programs[training_program_id].sessions[session_id].exercises[exercise_rank] = {
+          exercise_name,
+          phase,
+          value,
+          exercise_type,
+          location,
+          gif_link,
+          video_link
+      };
+  }
+
+  return programs;
+}
+
+// const table = [
+//   {
+//     training_program_id: 1,
+//     session_title: 'D_Seance 1',
+//     session_duration: 30,
+//     session_id: 1,
+//     session_rank: 1,
+//     exercise_name: 'Squat',
+//     exercise_rank: 1,
+//     phase: 'warm-up',
+//     value: 10,
+//     exercise_type: 'reps',
+//     location: 'in the gym',
+//     gif_link: 'example',
+//     video_link: 'example'
+//   },
+//   {
+//     training_program_id: 1,
+//     session_title: 'D_Seance 1',
+//     session_duration: 30,
+//     session_id: 1,
+//     session_rank: 1,
+//     exercise_name: 'Pompe',
+//     exercise_rank: 2,
+//     phase: 'session core',
+//     value: 12,
+//     exercise_type: 'reps',
+//     location: 'in the gym',
+//     gif_link: 'example',
+//     video_link: 'example'
+//   },
+//   {
+//     training_program_id: 1,
+//     session_title: 'D_Seance 1',
+//     session_duration: 30,
+//     session_id: 1,
+//     session_rank: 1,
+//     exercise_name: 'Fente avant',
+//     exercise_rank: 3,
+//     phase: 'session core',
+//     value: 15,
+//     exercise_type: 'reps',
+//     location: 'in the gym',
+//     gif_link: 'example',
+//     video_link: 'example'
+//   },
+//   {
+//     training_program_id: 1,
+//     session_title: 'D_Seance 1',
+//     session_duration: 30,
+//     session_id: 1,
+//     session_rank: 1,
+//     exercise_name: 'Crunch',
+//     exercise_rank: 4,
+//     phase: 'stretching',
+//     value: 10,
+//     exercise_type: 'reps',
+//     location: 'in the gym',
+//     gif_link: 'example',
+//     video_link: 'example'
+//   },
+//   {
+//     training_program_id: 1,
+//     session_title: 'D_Seance 2',
+//     session_duration: 30,
+//     session_id: 2,
+//     session_rank: 2,
+//     exercise_name: 'Squat',
+//     exercise_rank: 1,
+//     phase: 'warm-up',
+//     value: 12,
+//     exercise_type: 'reps',
+//     location: 'in the gym',
+//     gif_link: 'example',
+//     video_link: 'example'
+//   },
+//   {
+//     training_program_id: 1,
+//     session_title: 'D_Seance 2',
+//     session_duration: 30,
+//     session_id: 2,
+//     session_rank: 2,
+//     exercise_name: 'Pompe',
+//     exercise_rank: 2,
+//     phase: 'session core',
+//     value: 15,
+//     exercise_type: 'reps',
+//     location: 'in the gym',
+//     gif_link: 'example',
+//     video_link: 'example'
+//   },
+//   {
+//     training_program_id: 1,
+//     session_title: 'D_Seance 2',
+//     session_duration: 30,
+//     session_id: 2,
+//     session_rank: 2,
+//     exercise_name: 'Fente avant',
+//     exercise_rank: 3,
+//     phase: 'session core',
+//     value: 12,
+//     exercise_type: 'reps',
+//     location: 'in the gym',
+//     gif_link: 'example',
+//     video_link: 'example'
+//   },
+//   {
+//     training_program_id: 1,
+//     session_title: 'D_Seance 2',
+//     session_duration: 30,
+//     session_id: 2,
+//     session_rank: 2,
+//     exercise_name: 'Dips',
+//     exercise_rank: 4,
+//     phase: 'stretching',
+//     value: 10,
+//     exercise_type: 'reps',
+//     location: 'in the gym',
+//     gif_link: 'example',
+//     video_link: 'example'
+//   }
+// ]
+
+// const json = convertProgramToJson(table);
+// console.log(JSON.stringify(json, null, 2));
 
 module.exports = {
   convertDate,
@@ -230,5 +405,6 @@ module.exports = {
   isAllKeysInteger, 
   checkBodyInObject, 
   generate_objectives,
-  getElementsByKeyDeep
+  getElementsByKeyDeep,
+  convertProgramToJson
 }

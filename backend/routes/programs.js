@@ -5,7 +5,36 @@ const tools = require('../tools');
 const pool = require('../connectionString');
 
 // GET
-router.get('/getbyUserId', async (req, res) => {
+router.get('/getProgramInfoByUserId', async (req, res) => {
+  try {
+    const trimmedBody = tools.trimBody(req.query);
+    const { user_id } = trimmedBody;
+
+    if (!tools.checkBody(trimmedBody, ["user_id"])|| isNaN(user_id)) {
+      return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
+    const results = await pool.query(`SELECT p.training_program_id, w.title as session_title, w.duration as session_duration, w.session_id, w.session_rank, e.name as exercise_name, c.exercise_rank, c.phase, c.value, e.type as exercise_type, w.location, e.gif_link, e.video_link
+    FROM coachify.program p
+    JOIN coachify.workout_session w ON w.training_program_id = p.training_program_id
+    JOIN coachify.contains c ON c.session_id = w.session_id
+    JOIN coachify.exercise e ON e.exercise_id = c.exercise_id
+    JOIN coachify.follows_program f ON f.training_program_id = p.training_program_id
+    WHERE f.user_id = $1
+    ORDER BY training_program_id, w.session_rank, c.exercise_rank;`, [user_id]);
+
+    if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'No program found' });
+    }
+
+    return res.status(200).json(tools.convertProgramToJson(results.rows));
+  } catch (error) {
+    console.error('Error getting program', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+})
+
+router.get('/getByUserId', async (req, res) => {
     try {
       const trimmedBody = tools.trimBody(req.query);
       const { user_id } = trimmedBody;
@@ -50,7 +79,7 @@ router.post('/addProgram', async (req, res) => {
       if (!tools.checkBody(trimmedBody, ["name", 'period', 'description', 'AI_generated', 'objectives','workout_sessions']) ||isNaN(period)) {
         return res.status(400).json({ error: 'Missing required field' });
       }
-      if(!tools.checkBodyInObject(workout_sessions, ["duration", "location", "description"])|| !tools.isAllKeysInteger(workout_sessions)){
+      if(!tools.checkBodyInObject(workout_sessions, ["title", "duration", "location", "description"])|| !tools.isAllKeysInteger(workout_sessions)){
         return res.status(400).json({error : 'Incorrect workout_sessions format'})
       }
       tools.getElementsByKeyDeep(workout_sessions, "contains").forEach(element => {

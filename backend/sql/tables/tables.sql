@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Follows_program(
 
 CREATE TABLE IF NOT EXISTS COACHIFY.Workout_session(
         session_id SERIAL NOT NULL,
+        title VARCHAR(30) NOT NULL,
         training_program_id SERIAL NOT NULL,
         session_rank INT NOT NULL,
         duration INT NOT NULL,  -- durée en minutes
