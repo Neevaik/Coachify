@@ -96,6 +96,11 @@ async function generateProgram(user_data, previous_generated_text) {
         ],
       },
     ],
+    generationConfig : {
+      temperature : 0.5,
+      maxOutputTokens : 8192,
+
+    }
   };
   
   const model = vertexAI.preview.getGenerativeModel({ model: "gemini-pro" });
@@ -104,26 +109,30 @@ async function generateProgram(user_data, previous_generated_text) {
 
   const program = response.candidates[0].content.parts[0].text;
   const finishReason = response.candidates[0].finishReason;
-  const next_part = '';
-  if (finishReason === 'MAX_TOKENS'){
-    next_part, next_finishReason = generateProgram(user_data, program)
-  }
 
-  return {program, finishReason, next_part};
+  return {program, finishReason};
 }
 
 async function main() {
   const res = await getUserInfo(user_info);
-  const {program, finishReason, next_part} = await generateProgram(res, null);
-  console.log(program);
-  console.log(next_part);
+  const {program, finishReason} = await generateProgram(res, null);
+  
   if (finishReason === 'MAX_TOKENS'){
-    console.log("PAS ASSEZ DE TOKENS")
+    return null;
   }
+  else{
+    if (program.substring(0,3) === '```'){
+      console.log(program.substring(7, program.length-3));
+      return JSON.parse(program.substring(7,program.length - 3));
+    }
+    else {
+      return JSON.parse(program);
+    }
+  }
+
 }
 
-
-main();
+main()
 module.exports = {
   getUserInfo
 };
