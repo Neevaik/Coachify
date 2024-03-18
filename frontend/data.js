@@ -8,9 +8,6 @@ const programData = [
     { id: 7, session: "Resting", Day: 'Jour 7', duration: '20 min', calories: 100, image: 'https://medias.pourlascience.fr/api/v1/images/view/5d1b663a8fe56f77c8671165/wide_1300/image.jpg'}
 ];
 
-const sessions = [
-    { session: "Leg day", exercices: ["Squat", "Presse", "Bend Over", "Jumping Jack"] },
-    { session: "Abs", exercices: ["Planck", "Crunh", "Russian twist", "Straight legs"] },
-];
+
 
 export default  programData ;
