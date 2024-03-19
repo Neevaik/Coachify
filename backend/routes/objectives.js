@@ -14,7 +14,7 @@ router.get('/getByUserId', async (req, res) => {
             return res.status(400).json({message : 'Invalid user ID'})
         }
 
-        const results = await pool.query( `SELECT objective_id, user_id, objective, objective_description, weight_goal, starting_date
+        const results = await pool.query(`SELECT objective_id, user_id, objective, objective_description, weight_goal, starting_date
         FROM COACHIFY.Objective
         WHERE user_id = $1`, [user_id]);
 
@@ -94,8 +94,8 @@ router.put('/updateByUserId', async (req, res) => {
         return res.status(200).json({ message: 'Objective successfully updated' });
     }
     catch (error) {
-        console.error('Error updating objective', error)
-        res.status(500).json({ error: 'Internal server error' })
+        console.error('Error updating objective', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 })
 

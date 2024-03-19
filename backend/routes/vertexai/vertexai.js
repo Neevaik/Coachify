@@ -1,12 +1,10 @@
 const { VertexAI } = require("@google-cloud/vertexai");
 const pool = require('../../connectionString');
-const { text } = require("express");
 
 const projectId = "pure-league-414700";
 const location = "us-central1";
 
 const vertexAI = new VertexAI({ project: projectId, location: location });
-
 
 
 async function getUserInfo(user_info){
@@ -40,7 +38,7 @@ async function generateProgram(user_data, previous_generated_text) {
   The response must be exportable in JSON format.`
   var next_text = "";
   if (previous_generated_text === null){
-    next_text = `Here is an example where you can delete commentaries //
+    next_text = `Here is an example, YOU HAVE TO DELETE TEXT with //, these are indications to help you generate
     {
       "name" : "#to complete", // original name
       "period" : "#to complete", // int value of program duration in days
@@ -56,7 +54,7 @@ async function generateProgram(user_data, previous_generated_text) {
             "1" : {
               "exercise_name" : "#to complete",
               phase" : "#to complete", // between "warm-up", "session core" and "stretching"
-              "value" : #to complete // int value of reps OR seconds
+              "value" : #to complete // int value of reps  seconds
             },
             "2" : {
               "exercise_name" : "#to complete",
@@ -97,7 +95,7 @@ async function generateProgram(user_data, previous_generated_text) {
       },
     ],
     generationConfig : {
-      temperature : 0.5,
+      temperature : 0.1,
       maxOutputTokens : 8192,
 
     }
@@ -113,7 +111,7 @@ async function generateProgram(user_data, previous_generated_text) {
   return {program, finishReason};
 }
 
-async function main() {
+async function formatProgram() {
   const res = await getUserInfo(user_info);
   const {program, finishReason} = await generateProgram(res, null);
   
@@ -122,17 +120,127 @@ async function main() {
   }
   else{
     if (program.substring(0,3) === '```'){
-      console.log(program.substring(7, program.length-3));
-      return JSON.parse(program.substring(7,program.length - 3));
+      
+      console.log(addClosingBraces(program.substring(8, program.length-3)));
+      console.log("FIRST CASE");
+      return replaceAllExerciseNamesWithIds(JSON.parse(addClosingBraces(program.substring(8,program.length - 3))), referenceObj);
     }
     else {
-      return JSON.parse(program);
+      console.log(addClosingBraces(program));
+      console.log("SECOND CASE");
+      return replaceAllExerciseNamesWithIds(JSON.parse(addClosingBraces(program)), referenceObj);
     }
   }
 
 }
 
-main()
+
+function countBraces(str) {
+  let openBracesCount = 0;
+  let closeBracesCount = 0;
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === "{") {
+      openBracesCount++;
+    } else if (str[i] === "}") {
+      closeBracesCount++;
+    }
+  }
+  return {
+    openBracesCount,
+    closeBracesCount,
+  };
+}
+
+function addClosingBraces(str) {
+  const { openBracesCount, closeBracesCount } = countBraces(str);
+  const missingBracesCount = openBracesCount - closeBracesCount;
+  if (missingBracesCount > 0) {
+    return str + "}".repeat(missingBracesCount);
+  }
+  return str;
+}
+
+const referenceObj = [
+  {
+    "exercise_id": 1,
+    "name": "Squat",
+    "description": "Exercice de musculation pour les jambes et les fessiers",
+    "video_link": "example",
+    "gif_link": "example",
+    "level": 2,
+    "type": "reps",
+    "met": 10
+  },
+  {
+    "exercise_id": 2,
+    "name": "Pompe",
+    "description": "Exercice de musculation pour le haut du corps",
+    "video_link": "example",
+    "gif_link": "example",
+    "level": 1,
+    "type": "reps",
+    "met": 10
+  },
+  {
+    "exercise_id": 3,
+    "name": "Fente avant",
+    "description": "Exercice de musculation pour les jambes et les fessiers",
+    "video_link": "example",
+    "gif_link": "example",
+    "level": 2,
+    "type": "reps",
+    "met": 10
+  },
+  {
+    "exercise_id": 4,
+    "name": "Crunch",
+    "description": "Exercice de musculation pour les abdominaux",
+    "video_link": "example",
+    "gif_link": "example",
+    "level": 1,
+    "type": "reps",
+    "met": 10
+  },
+  {
+    "exercise_id": 5,
+    "name": "Dips",
+    "description": "Exercice de musculation pour les triceps",
+    "video_link": "example",
+    "gif_link": "example",
+    "level": 2,
+    "type": "reps",
+    "met": 10
+  }
+]
+
+function replaceAllExerciseNamesWithIds(obj, referenceObj, defaultValue) {
+  if (!obj || !referenceObj) {
+    return obj;
+  }
+
+  const newObj = { ...obj };
+
+  for (const key in newObj) {
+    if (key === "exercice_name") {
+      const referenceExercise = referenceObj.find(
+        (exercise) => exercise.exercice_name === newObj[key]
+      );
+
+      if (referenceExercise) {
+        newObj[key] = referenceExercise.exercice_id;
+      } else {
+        newObj[key] = defaultValue;
+      }
+    } else if (typeof newObj[key] === "object") {
+      newObj[key] = replaceAllExerciseNamesWithIds(newObj[key], referenceObj, defaultValue);
+    }
+  }
+
+  return newObj;
+}
+
+formatProgram()
 module.exports = {
-  getUserInfo
+  getUserInfo,
+  formatProgram
 };

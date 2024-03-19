@@ -406,5 +406,5 @@ module.exports = {
   checkBodyInObject, 
   generate_objectives,
   getElementsByKeyDeep,
-  convertProgramToJson
+  convertProgramToJson,
 }

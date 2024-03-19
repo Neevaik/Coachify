@@ -10,7 +10,7 @@ router.get('/getAll', async (req, res) => {
         const results = await pool.query(`
         SELECT exercise_id, name, description, video_link, GIF_link, level, type, MET
         FROM COACHIFY.Exercise`);
-        res.status(200).json(results.rows);
+        return res.status(200).json(results.rows);
     }
     catch (error) {
         console.error('Error getting exercise data', error);
