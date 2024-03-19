@@ -1,5 +1,5 @@
 import styles from '../styles/ExplorerScreen'
-import { NativeBaseProvider, Box, Text, ScrollView, View, Image, Heading, IconButton, HStack } from "native-base";
+import { NativeBaseProvider, Box, Text, ScrollView, View, Image, Avatar, IconButton, HStack } from "native-base";
 import React from "react";
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -176,7 +176,6 @@ export default function ExplorerScreen() {
   return (
     <NativeBaseProvider>
       <ScrollView style={{ flex: 1 }}>
-        {/* Header avec titre et bouton de recherche */}
         <Box flexDirection="row" justifyContent="space-between" alignItems="center" px={4} py={2} borderBottomWidth={1} borderBottomColor="gray.200">
           <Text fontSize="xl" fontWeight="bold">Explorateur d'entrainement</Text>
           <IconButton
@@ -185,7 +184,6 @@ export default function ExplorerScreen() {
           />
         </Box>
 
-        {/* Liste de cartes pour les exercices */}
         <Box>
           <Text fontSize="xl" fontWeight="bold" mt={4} mx={4}>Exercices</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 4 }}>
@@ -202,7 +200,6 @@ export default function ExplorerScreen() {
             ))}
           </ScrollView>
         </Box>
-        {/* Liste de cartes pour les défis de 30 jours */}
         <Box>
           <Text fontSize="xl" fontWeight="bold" mt={4} mx={4}>30 days challenges</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 4 }}>
@@ -232,23 +229,25 @@ export default function ExplorerScreen() {
             ))}
           </ScrollView>
         </Box>
-
         <Box>
           <Text fontSize="xl" fontWeight="bold" mt={4} mx={4}>Tendancy</Text>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 4 }}>
+          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 4 }}>
             {Tendancy.map((challenge, index) => (
-              <Box key={index} shadow={3} rounded="lg" bg="white" width={200} height={250} mr={4}>
-                <Image source={{ uri: challenge.image }} alt="Card image" width="100%" height={150} borderTopRadius="lg" />
-                <Box p={2}>
+              <Box key={index} shadow={3} rounded="lg" bg="white" width="100%" p={4} mb={4}>
+                <Avatar
+                  source={{ uri: challenge.image }}
+                  size="xl"
+                  mb={2}
+                  mx="auto"
+                />
+                <Box alignItems="center">
                   <Text fontSize="lg" fontWeight="bold" mb={1}>{challenge.title}</Text>
-                  <Text color="gray.500" fontSize="md">level :{challenge.level}</Text>
+                  <Text color="gray.500" fontSize="md">Level: {challenge.level}</Text>
                 </Box>
               </Box>
             ))}
           </ScrollView>
         </Box>
-
-
       </ScrollView>
     </NativeBaseProvider>
   );
