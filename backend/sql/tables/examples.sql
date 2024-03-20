@@ -20,12 +20,12 @@ INSERT INTO COACHIFY.Weight (user_id, weight_value, date) VALUES
   (5, 84.5, '2023-12-01');
 
 -- Table Exercise
-INSERT INTO COACHIFY.Exercise (name, description, video_link, GIF_link, level, type, MET) VALUES
-('Squat', 'Exercice de musculation pour les jambes et les fessiers', 'example', 'example', 2, 'reps', 10),
-('Pompe', 'Exercice de musculation pour le haut du corps', 'example', 'example', 1,  'reps',10),
-('Fente avant', 'Exercice de musculation pour les jambes et les fessiers', 'example', 'example', 2, 'reps',10),
-('Crunch', 'Exercice de musculation pour les abdominaux', 'example', 'example', 1, 'reps',10),
-('Dips', 'Exercice de musculation pour les triceps', 'example', 'example', 2, 'reps',10);
+INSERT INTO COACHIFY.Exercise (name, description, video_link, GIF_link, PNG_link, level, type, MET) VALUES
+('Squat', 'Exercice de musculation pour les jambes et les fessiers', 'example', 'example', 'example', 2, 'reps', 10),
+('Pompe', 'Exercice de musculation pour le haut du corps', 'example', 'example','example', 1,  'reps',10),
+('Fente avant', 'Exercice de musculation pour les jambes et les fessiers', 'example', 'example', 'example', 2, 'reps',10),
+('Crunch', 'Exercice de musculation pour les abdominaux', 'example', 'example', 'example', 1, 'reps',10),
+('Dips', 'Exercice de musculation pour les triceps', 'example', 'example','example', 2, 'reps',10);
 
 -- Table Muscle
 INSERT INTO COACHIFY.Muscle (muscle_name, muscle_group, function) VALUES
@@ -97,16 +97,16 @@ INSERT INTO COACHIFY.Follows_program (user_id, training_program_id, start_date) 
 -- Table Workout_session
 
 --    Séance 1 du programme Débutant 
-INSERT INTO COACHIFY.Workout_session (training_program_id, duration, title, location, description, session_rank) VALUES
-(1, 30, 'D_Seance 1','in the gym', 'Séance d''entraînement pour débutants', 1);
+INSERT INTO COACHIFY.Workout_session (training_program_id, duration, title, image_link, location, description, session_rank) VALUES
+(1, 30, 'D_Seance 1','https://lh3.googleusercontent.com/proxy/-5j7L-If8Bb6mVvuPAFvPY_2aeUFukUHNHoY0by3StKYsWFBfUP5I5pCuo4N697imoBgRpc_1b7ugffA0ctIVjb-QLKUWQ2ySfsXX_TqkinGZcUv2aYhEYrvNVc2KuU3sg-gOSqgzqfDafqiz0MMVkWihBGBZh_g2WXn','in the gym', 'Séance d''entraînement pour débutants', 1);
 
 --    Séance 2 du programme Débutant
-INSERT INTO COACHIFY.Workout_session (training_program_id, duration, title, location, description, session_rank) VALUES
-(1, 30, 'D_Seance 2', 'in the gym', 'Séance d''entraînement pour débutants', 2);
+INSERT INTO COACHIFY.Workout_session (training_program_id, duration, title, image_link, location, description, session_rank) VALUES
+(1, 30, 'D_Seance 2', 'https://lh3.googleusercontent.com/proxy/-5j7L-If8Bb6mVvuPAFvPY_2aeUFukUHNHoY0by3StKYsWFBfUP5I5pCuo4N697imoBgRpc_1b7ugffA0ctIVjb-QLKUWQ2ySfsXX_TqkinGZcUv2aYhEYrvNVc2KuU3sg-gOSqgzqfDafqiz0MMVkWihBGBZh_g2WXn','in the gym', 'Séance d''entraînement pour débutants', 2);
 
 --    Séance 1 du programme Intermédiaire
-INSERT INTO COACHIFY.Workout_session (training_program_id, duration, title, location, description, session_rank) VALUES
-(2, 45, 'I_Seance 1', 'in the gym', 'Séance d''entraînement pour intermédiaires', 1);
+INSERT INTO COACHIFY.Workout_session (training_program_id, duration, title, image_link, location, description, session_rank) VALUES
+(2, 45, 'I_Seance 1','https://lh3.googleusercontent.com/proxy/-5j7L-If8Bb6mVvuPAFvPY_2aeUFukUHNHoY0by3StKYsWFBfUP5I5pCuo4N697imoBgRpc_1b7ugffA0ctIVjb-QLKUWQ2ySfsXX_TqkinGZcUv2aYhEYrvNVc2KuU3sg-gOSqgzqfDafqiz0MMVkWihBGBZh_g2WXn', 'in the gym', 'Séance d''entraînement pour intermédiaires', 1);
 
 -- Table Contains (contenu des workout sessions)
 

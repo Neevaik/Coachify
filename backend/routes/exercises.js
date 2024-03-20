@@ -8,7 +8,7 @@ const tools = require('../tools');
 router.get('/getAll', async (req, res) => {
     try {
         const results = await pool.query(`
-        SELECT exercise_id, name, description, video_link, GIF_link, level, type, MET
+        SELECT exercise_id, name, description, video_link, GIF_link, PNG_link, level, type, MET
         FROM COACHIFY.Exercise`);
         return res.status(200).json(results.rows);
     }
@@ -27,7 +27,7 @@ router.get('/getExercisesByMuscle', async (req, res) => {
         }
 
         let query = `
-        SELECT exercise.exercise_id, exercise.name, exercise.description, exercise.video_link, exercise.GIF_link, exercise.level, exercise.type, exercise.MET
+        SELECT exercise.exercise_id, exercise.name, exercise.description, exercise.video_link, exercise.GIF_link, exercise.PNG_link, exercise.level, exercise.type, exercise.MET
         FROM COACHIFY.Exercise AS exercise
         INNER JOIN COACHIFY.Targets AS targets ON exercise.exercise_id = targets.exercise_id
         INNER JOIN COACHIFY.Muscle AS muscle ON targets.muscle_name = muscle.muscle_name
@@ -68,7 +68,7 @@ router.get('/getExercisesByEquipment', async (req, res) => {
         }
 
         let query = `
-        SELECT exercise.exercise_id, exercise.name, exercise.description, exercise.video_link, exercise.GIF_link, exercise.level, exercise.type, exercise.MET
+        SELECT exercise.exercise_id, exercise.name, exercise.description, exercise.video_link, exercise.GIF_link, exercise.PNG_link, exercise.level, exercise.type, exercise.MET
         FROM COACHIFY.Exercise AS exercise
         INNER JOIN COACHIFY.Requires AS requires ON exercise.exercise_id = requires.exercise_id
         INNER JOIN COACHIFY.Equipment AS equipment ON requires.equipment_id = equipment.equipment_id

@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Follows_program(
 CREATE TABLE IF NOT EXISTS COACHIFY.Workout_session(
         session_id SERIAL NOT NULL,
         title VARCHAR(30) NOT NULL,
+        image_link VARCHAR NOT NULL,
         training_program_id SERIAL NOT NULL,
         session_rank INT NOT NULL,
         duration INT NOT NULL,  -- durée en minutes
@@ -94,6 +95,7 @@ CREATE TABLE IF NOT EXISTS COACHIFY.Exercise(
         MET FLOAT NOT NULL, -- unité de mesure pour le calcul de la dépense énergetique Metabolic Equivalent of Task
         video_link VARCHAR NOT NULL,
         GIF_link VARCHAR NOT NULL,
+        PNG_link VARCHAR NOT NULL,
         type exercise_type NOT NULL, -- "reps" pour les exercices à répétition ou "secs" pour les exercices à durée
         level INT NOT NULL CHECK(level >= 1 AND level <=5), -- niveau de difficulté de l'exercice compris entre 1 et 5
         PRIMARY KEY(exercise_id));

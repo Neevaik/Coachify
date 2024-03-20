@@ -14,14 +14,14 @@ router.get('/getProgramInfoByUserId', async (req, res) => {
       return res.status(400).json({ message: 'Invalid user ID' });
     }
 
-    const results = await pool.query(`SELECT p.training_program_id, w.title as session_title, w.duration as session_duration, w.session_id, w.session_rank, e.name as exercise_name, c.exercise_rank, c.phase, c.value, e.type as exercise_type, w.location, e.gif_link, e.video_link
+    const results = await pool.query(`SELECT p.training_program_id as program_id, f.user_id, p.period as program_duration, w.title as session_title, w.image_link as session_image, w.duration as session_duration, w.session_id, w.session_rank, e.name as exercise_name,   c.exercise_rank, c.phase, c.value, e.type as exercise_type, w.location, e.gif_link, e.video_link, e.PNG_link as PNG_image
     FROM coachify.program p
     JOIN coachify.workout_session w ON w.training_program_id = p.training_program_id
     JOIN coachify.contains c ON c.session_id = w.session_id
     JOIN coachify.exercise e ON e.exercise_id = c.exercise_id
     JOIN coachify.follows_program f ON f.training_program_id = p.training_program_id
     WHERE f.user_id = $1
-    ORDER BY training_program_id, w.session_rank, c.exercise_rank;`, [user_id]);
+    ORDER BY program_id, w.session_rank, c.exercise_rank;`, [user_id]);
 
     if (results.rowCount === 0) {
       return res.status(404).json({ error: 'No program found' });

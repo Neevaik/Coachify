@@ -226,10 +226,13 @@ function convertProgramToJson(table) {
 
   for (const row of table) {
       const {
-          training_program_id,
+          program_id,
+          user_id,
+          program_duration,
           session_title,
           session_duration,
           session_id,
+          session_image,
           session_rank,
           exercise_name,
           exercise_rank,
@@ -238,32 +241,40 @@ function convertProgramToJson(table) {
           exercise_type,
           location,
           gif_link,
-          video_link
+          video_link,
+          png_link,
       } = row;
 
-      if (!programs[training_program_id]) {
-          programs[training_program_id] = {
+      if (!programs[program_id]) {
+          programs[program_id] = {
+              program_id,
+              user_id, 
+              program_duration,
               sessions: {}
           };
       }
 
-      if (!programs[training_program_id].sessions[session_id]) {
-          programs[training_program_id].sessions[session_id] = {
+      if (!programs[program_id].sessions[session_rank]) {
+          programs[program_id].sessions[session_rank] = {
               session_title,
               session_duration,
+              session_image,
+              session_id,
               exercises: {}
           };
       }
 
-      programs[training_program_id].sessions[session_id].exercises[exercise_rank] = {
+      programs[program_id].sessions[session_rank].exercises[exercise_rank] = {
           exercise_name,
           phase,
           value,
           exercise_type,
           location,
           gif_link,
-          video_link
+          video_link,
+          png_link
       };
+
   }
 
   return programs;
@@ -271,7 +282,7 @@ function convertProgramToJson(table) {
 
 // const table = [
 //   {
-//     training_program_id: 1,
+//     program_id: 1,
 //     session_title: 'D_Seance 1',
 //     session_duration: 30,
 //     session_id: 1,
@@ -286,7 +297,7 @@ function convertProgramToJson(table) {
 //     video_link: 'example'
 //   },
 //   {
-//     training_program_id: 1,
+//     program_id: 1,
 //     session_title: 'D_Seance 1',
 //     session_duration: 30,
 //     session_id: 1,
@@ -301,7 +312,7 @@ function convertProgramToJson(table) {
 //     video_link: 'example'
 //   },
 //   {
-//     training_program_id: 1,
+//     program_id: 1,
 //     session_title: 'D_Seance 1',
 //     session_duration: 30,
 //     session_id: 1,
@@ -316,7 +327,7 @@ function convertProgramToJson(table) {
 //     video_link: 'example'
 //   },
 //   {
-//     training_program_id: 1,
+//     program_id: 1,
 //     session_title: 'D_Seance 1',
 //     session_duration: 30,
 //     session_id: 1,
@@ -331,7 +342,7 @@ function convertProgramToJson(table) {
 //     video_link: 'example'
 //   },
 //   {
-//     training_program_id: 1,
+//     program_id: 1,
 //     session_title: 'D_Seance 2',
 //     session_duration: 30,
 //     session_id: 2,
@@ -346,7 +357,7 @@ function convertProgramToJson(table) {
 //     video_link: 'example'
 //   },
 //   {
-//     training_program_id: 1,
+//     program_id: 1,
 //     session_title: 'D_Seance 2',
 //     session_duration: 30,
 //     session_id: 2,
@@ -361,7 +372,7 @@ function convertProgramToJson(table) {
 //     video_link: 'example'
 //   },
 //   {
-//     training_program_id: 1,
+//     program_id: 1,
 //     session_title: 'D_Seance 2',
 //     session_duration: 30,
 //     session_id: 2,
@@ -376,7 +387,7 @@ function convertProgramToJson(table) {
 //     video_link: 'example'
 //   },
 //   {
-//     training_program_id: 1,
+//     program_id: 1,
 //     session_title: 'D_Seance 2',
 //     session_duration: 30,
 //     session_id: 2,
